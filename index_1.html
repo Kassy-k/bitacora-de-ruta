@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitácora de Ruta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f1ea; --surface:#ffffff; --surface-2:#eae6da; --surface-3:#e1dbc9;
+    --ink:#201f1c; --ink-soft:#63594c; --border:#ddd6c4;
+    --accent:#1f5c73; --accent-ink:#ffffff; --accent-soft:#dbe9ee; --accent-soft-ink:#123642;
+    --crit:#b3311f; --crit-soft:#f6dfda; --crit-ink:#7a1f13;
+    --warn:#a9761c; --warn-soft:#f1e6cd; --warn-ink:#6f4c0f;
+    --ok:#2f7a4f; --ok-soft:#dff0e5; --ok-ink:#1d4e32;
+    --cat-1:#1f5c73; --cat-2:#b3311f; --cat-3:#a9761c; --cat-4:#2f7a4f; --cat-5:#6b4a8a; --cat-6:#4d6e75;
+    --shadow: 0 1px 2px rgba(32,31,28,.06), 0 4px 14px rgba(32,31,28,.05);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14181a; --surface:#1c2124; --surface-2:#232a2d; --surface-3:#2b3336;
+      --ink:#eef1ee; --ink-soft:#a2aba7; --border:#343d40;
+      --accent:#5aabca; --accent-ink:#07222b; --accent-soft:#1c3540; --accent-soft-ink:#bfe3f0;
+      --crit:#e2695a; --crit-soft:#3a2220; --crit-ink:#f4b9af;
+      --warn:#d9ab53; --warn-soft:#3a2f18; --warn-ink:#f0d192;
+      --ok:#6fc492; --ok-soft:#1d3327; --ok-ink:#b3e3c6;
+      --cat-1:#5aabca; --cat-2:#e2695a; --cat-3:#d9ab53; --cat-4:#6fc492; --cat-5:#b39ddb; --cat-6:#8fa8ae;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14181a; --surface:#1c2124; --surface-2:#232a2d; --surface-3:#2b3336;
+    --ink:#eef1ee; --ink-soft:#a2aba7; --border:#343d40;
+    --accent:#5aabca; --accent-ink:#07222b; --accent-soft:#1c3540; --accent-soft-ink:#bfe3f0;
+    --crit:#e2695a; --crit-soft:#3a2220; --crit-ink:#f4b9af;
+    --warn:#d9ab53; --warn-soft:#3a2f18; --warn-ink:#f0d192;
+    --ok:#6fc492; --ok-soft:#1d3327; --ok-ink:#b3e3c6;
+    --cat-1:#5aabca; --cat-2:#e2695a; --cat-3:#d9ab53; --cat-4:#6fc492; --cat-5:#b39ddb; --cat-6:#8fa8ae;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Public Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+    font-size:14.5px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.hdr{font-family:"Oswald",system-ui,sans-serif; font-weight:600; letter-spacing:.01em; text-wrap:balance;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums;}
+  a{color:var(--accent);}
+  button{font:inherit; cursor:pointer;}
+  input,select,textarea{font:inherit; color:var(--ink); background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:8px 10px;}
+  input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
+  textarea{resize:vertical; min-height:70px;}
+  label{font-size:12.5px; font-weight:600; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; display:block; margin-bottom:5px;}
+  .field{display:flex; flex-direction:column; margin-bottom:14px;}
+  .hint{font-size:12px; color:var(--ink-soft); margin-top:4px; font-weight:400; text-transform:none; letter-spacing:0;}
+
+  /* layout */
+  #app{display:none; min-height:100vh;}
+  #app.show{display:flex;}
+  nav.side{
+    width:220px; flex:none; background:var(--surface); border-right:1px solid var(--border);
+    display:flex; flex-direction:column; padding:20px 14px; gap:2px; position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  .brand{padding:2px 8px 18px; }
+  .brand .mark{font-size:22px; font-family:"Oswald",sans-serif; font-weight:700; color:var(--accent); letter-spacing:.01em;}
+  .brand .sub{font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+  .navbtn{
+    display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; border:none; background:transparent;
+    color:var(--ink-soft); font-weight:600; font-size:13.5px; text-align:left;
+  }
+  .navbtn:hover{background:var(--surface-2); color:var(--ink);}
+  .navbtn.active{background:var(--accent-soft); color:var(--accent-soft-ink);}
+  .navbtn .n{font-family:"IBM Plex Mono",monospace; font-size:11px; background:var(--surface-3); color:var(--ink-soft); border-radius:10px; padding:1px 7px; margin-left:auto;}
+  .navbtn.active .n{background:var(--accent); color:var(--accent-ink);}
+  .side-foot{margin-top:auto; padding:10px 8px; font-size:11.5px; color:var(--ink-soft); border-top:1px solid var(--border);}
+  .side-foot .who{font-weight:600; color:var(--ink); display:block; margin-bottom:4px; word-break:break-all;}
+  .side-foot button{background:none; border:none; padding:0; color:var(--accent); font-weight:600; font-size:11.5px;}
+
+  /* stacked bar chart (pestaña Gráficas): una barra por decisión, segmentada
+     por quién autorizó — combina ambas dimensiones en una sola gráfica */
+  .stackbar{max-width:720px;}
+  .stackbar-row{margin-bottom:20px;}
+  .stackbar-row:last-child{margin-bottom:0;}
+  .stackbar-label{display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:13.5px; margin-bottom:7px;}
+  .stackbar-label .total{font-family:"IBM Plex Mono",monospace; color:var(--ink-soft); font-size:12.5px; flex:none;}
+  .stackbar-track{display:flex; height:24px; border-radius:0 5px 5px 0; overflow:hidden; background:var(--surface); gap:2px; min-width:24px;}
+  .stackbar-seg{height:100%;}
+  .stackbar-legend{list-style:none; margin:22px 0 0; padding:16px 0 0; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:10px 20px;}
+  .stackbar-legend li{display:flex; align-items:center; gap:8px; font-size:12.5px;}
+  .stackbar-legend .swatch{width:11px; height:11px; border-radius:3px; flex:none;}
+  .stackbar-legend .cnt{font-family:"IBM Plex Mono",monospace; color:var(--ink-soft); font-size:12px;}
+
+  main{flex:1; min-width:0; padding:28px 32px 60px; max-width:1180px;}
+  .pagehead{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:22px; flex-wrap:wrap;}
+  .pagehead h1{font-size:26px; margin:0 0 4px;}
+  .pagehead p{margin:0; color:var(--ink-soft); font-size:13.5px; max-width:60ch;}
+  .actions{display:flex; gap:8px; flex-wrap:wrap;}
+
+  .btn{border-radius:7px; border:1px solid var(--border); background:var(--surface); color:var(--ink); padding:9px 14px; font-weight:600; font-size:13.5px; display:inline-flex; align-items:center; gap:7px;}
+  .btn:hover{background:var(--surface-2);}
+  .btn.primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+  .btn.primary:hover{filter:brightness(1.06);}
+  .btn.danger{color:var(--crit); border-color:var(--crit-soft);}
+  .btn.danger:hover{background:var(--crit-soft);}
+  .btn.sm{padding:6px 10px; font-size:12.5px; border-radius:6px;}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:20px;}
+  .grid{display:grid; gap:16px;}
+
+  /* stat tiles */
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:22px;}
+  .stat{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 18px; box-shadow:var(--shadow);}
+  .stat .v{font-family:"Oswald",sans-serif; font-size:30px; font-weight:600; line-height:1;}
+  .stat .l{font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; margin-top:6px; font-weight:600;}
+  .stat.crit .v{color:var(--crit);}
+  .stat.warn .v{color:var(--warn);}
+  .stat.ok .v{color:var(--ok);}
+
+  /* pill / badge */
+  .pill{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; padding:3px 9px; border-radius:99px;}
+  .pill.crit{background:var(--crit-soft); color:var(--crit-ink);}
+  .pill.warn{background:var(--warn-soft); color:var(--warn-ink);}
+  .pill.ok{background:var(--ok-soft); color:var(--ok-ink);}
+  .pill.neutral{background:var(--surface-3); color:var(--ink-soft);}
+  .dot{width:7px; height:7px; border-radius:50%; background:currentColor; flex:none;}
+
+  /* bars for dashboard breakdowns */
+  .barrow{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:7px 0; font-size:13px;}
+  .barrow .lbl{display:flex; justify-content:space-between; gap:8px;}
+  .barrow .track{grid-column:1/-1; height:7px; background:var(--surface-3); border-radius:99px; overflow:hidden;}
+  .barrow .fill{height:100%; border-radius:99px; background:var(--accent);}
+  .barrow .fill.crit{background:var(--crit);}
+  .barrow .count{font-family:"IBM Plex Mono",monospace; color:var(--ink-soft); font-size:12px;}
+
+  section.panel{display:none;}
+  section.panel.active{display:block;}
+
+  /* form */
+  form.caseform{display:grid; grid-template-columns:repeat(2,1fr); gap:0 20px;}
+  form.caseform .full{grid-column:1/-1;}
+  .formcard{margin-bottom:18px;}
+  .formcard h3{margin:0 0 14px; font-size:14px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); display:flex; align-items:center; gap:8px;}
+  .formcard h3 .num{width:20px; height:20px; border-radius:50%; background:var(--accent); color:var(--accent-ink); font-family:"IBM Plex Mono",monospace; font-size:11px; display:inline-flex; align-items:center; justify-content:center; font-weight:600;}
+  .radiogrid{display:flex; flex-wrap:wrap; gap:8px;}
+  .radiochip{display:flex; align-items:center; gap:7px; border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:13px; background:var(--surface); cursor:pointer;}
+  .radiochip:has(input:checked){border-color:var(--accent); background:var(--accent-soft); color:var(--accent-soft-ink); font-weight:600;}
+  .radiochip input{margin:0;}
+  .policy-flag{display:none; margin-top:10px; padding:10px 12px; border-radius:8px; background:var(--crit-soft); color:var(--crit-ink); font-size:13px; font-weight:600; gap:8px; align-items:flex-start;}
+  .policy-flag.show{display:flex;}
+  .policy-ok{display:none; margin-top:10px; padding:10px 12px; border-radius:8px; background:var(--ok-soft); color:var(--ok-ink); font-size:13px; font-weight:600; gap:8px; align-items:flex-start;}
+  .policy-ok.show{display:flex;}
+
+  .photodrop{border:1.5px dashed var(--border); border-radius:10px; padding:16px; text-align:center; color:var(--ink-soft); font-size:13px; background:var(--surface-2);}
+  .photodrop.drag{border-color:var(--accent); background:var(--accent-soft);}
+  .thumbs{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;}
+  .thumb{position:relative; width:88px; height:88px; border-radius:8px; overflow:hidden; border:1px solid var(--border);}
+  .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .thumb button{position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%; background:rgba(20,20,20,.65); color:#fff; border:none; font-size:12px; line-height:1; padding:0;}
+
+  /* table */
+  table.list{width:100%; border-collapse:collapse; font-size:13.5px;}
+  table.list th{text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); padding:9px 12px; border-bottom:1px solid var(--border);}
+  table.list td{padding:11px 12px; border-bottom:1px solid var(--border); vertical-align:top;}
+  table.list tbody tr{cursor:pointer;}
+  table.list tbody tr:hover{background:var(--surface-2);}
+  .folio{font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--accent);}
+  .muted{color:var(--ink-soft);}
+  .filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; align-items:flex-end;}
+  .filters .field{margin-bottom:0; min-width:150px;}
+  .empty{text-align:center; padding:50px 20px; color:var(--ink-soft);}
+  .empty .big{font-size:34px; margin-bottom:8px;}
+
+  /* drawer */
+  .overlay{position:fixed; inset:0; background:rgba(20,20,18,.42); display:none; align-items:stretch; justify-content:flex-end; z-index:50;}
+  .overlay.show{display:flex;}
+  .drawer{width:min(560px,94vw); background:var(--bg); height:100%; overflow-y:auto; padding:26px 26px 60px; box-shadow:-8px 0 30px rgba(0,0,0,.18);}
+  .drawer-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px;}
+  .drawer-head h2{margin:0 0 4px; font-size:20px;}
+  .closebtn{background:var(--surface); border:1px solid var(--border); border-radius:8px; width:32px; height:32px; font-size:15px; flex:none;}
+  .kv{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; font-size:13.5px; margin:14px 0;}
+  .kv dt{color:var(--ink-soft); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.03em; padding-top:2px;}
+  .kv dd{margin:0;}
+  .seg{border-top:1px solid var(--border); margin-top:18px; padding-top:16px;}
+  .seg h3{font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); margin:0 0 12px;}
+  .segitem{background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:11px 13px; margin-bottom:9px; font-size:13px;}
+  .segitem .meta{display:flex; justify-content:space-between; color:var(--ink-soft); font-size:11.5px; margin-bottom:4px; font-family:"IBM Plex Mono",monospace;}
+  .segform{display:flex; gap:8px; margin-top:10px;}
+  .segform textarea{flex:1;}
+  .drawerphotos{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+  .drawerphotos img{width:96px; height:96px; object-fit:cover; border-radius:8px; border:1px solid var(--border); cursor:zoom-in;}
+  .lightbox{position:fixed; inset:0; background:rgba(10,10,10,.85); display:none; align-items:center; justify-content:center; z-index:60; padding:30px;}
+  .lightbox.show{display:flex;}
+  .lightbox img{max-width:100%; max-height:100%; border-radius:6px;}
+
+  /* catalog */
+  .catlist{display:grid; gap:10px;}
+  .catrow{display:grid; grid-template-columns:1fr auto auto auto; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px;}
+  .catrow .name{font-weight:600;}
+  .catrow .notes{color:var(--ink-soft); font-size:12.5px; grid-column:1/2;}
+  .toggle{position:relative; width:44px; height:24px; border-radius:99px; background:var(--surface-3); border:1px solid var(--border); flex:none;}
+  .toggle .knob{position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.3); transition:left .15s;}
+  .toggle.on{background:var(--ok);}
+  .toggle.on .knob{left:22px;}
+  .newcat{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; align-items:flex-end;}
+  .newcat .field{margin-bottom:0;}
+
+  .banner{display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:10px; font-size:13px; margin-bottom:18px;}
+  .banner.readonly{background:var(--warn-soft); color:var(--warn-ink);}
+  .banner.saved{background:var(--ok-soft); color:var(--ok-ink);}
+  .toast{position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; box-shadow:var(--shadow); z-index:80; display:none;}
+  .toast.show{display:block;}
+
+  /* auth gate */
+  .authgate{position:fixed; inset:0; background:var(--bg); display:flex; align-items:center; justify-content:center; z-index:100; padding:20px;}
+  .authgate.hide{display:none;}
+  .authcard{background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); padding:36px 32px; max-width:380px; width:100%; text-align:center;}
+  .authcard .mark{font-size:24px; font-family:"Oswald",sans-serif; font-weight:700; color:var(--accent); margin-bottom:6px;}
+  .authcard .sub{color:var(--ink-soft); font-size:13px; margin-bottom:22px;}
+  .authcard p{font-size:13.5px; color:var(--ink-soft); margin:0 0 18px;}
+  .gsignin{display:inline-flex; align-items:center; gap:10px; background:#fff; color:#3c4043; border:1px solid #dadce0; border-radius:8px; padding:10px 18px; font-weight:600; font-size:14px;}
+  .gsignin:hover{box-shadow:0 1px 3px rgba(0,0,0,.15);}
+  .gsignin svg{width:18px; height:18px;}
+
+  ::-webkit-scrollbar{width:10px; height:10px;}
+  ::-webkit-scrollbar-thumb{background:var(--surface-3); border-radius:99px;}
+
+  @media (max-width: 760px){
+    #app{flex-direction:column;}
+    nav.side{width:100%; height:auto; position:relative; flex-direction:row; overflow-x:auto; align-items:center; padding:12px;}
+    .brand{padding:0 10px 0 2px;}
+    .side-foot{display:none;}
+    main{padding:20px 16px 50px;}
+    form.caseform{grid-template-columns:1fr;}
+    .drawer{width:100vw;}
+  }
+</style>
+</head>
+<body>
+
+<div class="authgate" id="authGate">
+  <div class="authcard">
+    <div class="mark">Bitácora de Ruta</div>
+    <div class="sub">Incidencias de mercancía en ruta</div>
+    <div id="authGateBody">
+      <p>Verificando acceso…</p>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+
+  <nav class="side">
+    <div class="brand">
+      <div class="mark">Bitácora de Ruta</div>
+      <div class="sub">Incidencias de mercancía</div>
+    </div>
+    <button class="navbtn" data-tab="resumen">Resumen</button>
+    <button class="navbtn" data-tab="graficas">Gráficas</button>
+    <button class="navbtn" data-tab="nueva">+ Nueva incidencia</button>
+    <button class="navbtn" data-tab="lista">Bitácora</button>
+    <button class="navbtn" data-tab="catalogo">Catálogo de mercancía</button>
+    <div class="side-foot">
+      <span class="who" id="whoAmI"></span>
+      <button type="button" id="btnSignOut">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- RESUMEN -->
+    <section class="panel" id="panel-resumen">
+      <div class="pagehead">
+        <div>
+          <h1>Resumen</h1>
+          <p>Panorama general de incidencias de mercancía dañada en ruta y su apego a política.</p>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnExportSummary">Exportar CSV</button>
+        </div>
+      </div>
+      <div class="stats" id="statTiles"></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;">
+        <div class="card">
+          <h3 class="hdr" style="margin:0 0 4px; font-size:15px;">Fuera de política — por quién autorizó</h3>
+          <p class="hint" style="margin:0 0 12px;">Casos donde se autorizó cambio físico o dejar la mercancía, contra la regla del catálogo.</p>
+          <div id="breakdownAutoriza"></div>
+        </div>
+        <div class="card">
+          <h3 class="hdr" style="margin:0 0 4px; font-size:15px;">Incidencias por tipo de mercancía</h3>
+          <p class="hint" style="margin:0 0 12px;">Volumen total de casos registrados por categoría.</p>
+          <div id="breakdownTipo"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <h3 class="hdr" style="margin:0 0 4px; font-size:15px;">Últimos 6 meses</h3>
+        <p class="hint" style="margin:0 0 12px;">Casos registrados por mes.</p>
+        <div id="breakdownMes"></div>
+      </div>
+    </section>
+
+    <!-- GRAFICAS -->
+    <section class="panel" id="panel-graficas">
+      <div class="pagehead">
+        <div>
+          <h1>Gráficas</h1>
+          <p>Cada barra es una decisión tomada; el color dentro de la barra muestra quién dio la indicación.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div id="stackChart"></div>
+      </div>
+    </section>
+
+    <!-- NUEVA -->
+    <section class="panel" id="panel-nueva">
+      <div class="pagehead">
+        <div>
+          <h1>Nueva incidencia</h1>
+          <p>Documenta el caso tal como fue reportado. Todo campo con detalle ayuda para el respaldo posterior.</p>
+        </div>
+      </div>
+      <div class="card">
+        <form class="caseform" id="caseForm">
+          <div class="formcard full">
+            <h3><span class="num">1</span>Datos del envío</h3>
+            <div class="field"><label for="f_fecha">Fecha del reporte</label><input type="date" id="f_fecha" required></div>
+            <div class="field"><label for="f_ruta">Ruta / Unidad</label><input type="text" id="f_ruta" placeholder="Ej. Ruta 14 / Unidad 208" required></div>
+            <div class="field"><label for="f_operador">Operador</label><input type="text" id="f_operador" placeholder="Nombre del operador"></div>
+            <div class="field"><label for="f_pedido">Número de pedido</label><input type="text" id="f_pedido" placeholder="Ej. 0083211" required></div>
+          </div>
+
+          <div class="formcard full">
+            <h3><span class="num">2</span>La mercancía</h3>
+            <div class="field full" style="grid-column:1/-1;">
+              <label for="f_tipo">Tipo de mercancía</label>
+              <select id="f_tipo" required></select>
+              <div class="hint" id="tipoRuleHint"></div>
+            </div>
+            <div class="field full" style="grid-column:1/-1;">
+              <label for="f_dano">Descripción del daño / motivo</label>
+              <textarea id="f_dano" placeholder="Ej. Caja con manchas de humedad, producto golpeado, empaque roto..." required></textarea>
+            </div>
+          </div>
+
+          <div class="formcard full">
+            <h3><span class="num">3</span>Qué se resolvió en sitio</h3>
+            <div class="field full" style="grid-column:1/-1;">
+              <label>Decisión tomada</label>
+              <div class="radiogrid" id="decisionGrid"></div>
+            </div>
+            <div class="field"><label for="f_autPor">¿Quién dio la indicación?</label>
+              <select id="f_autPor">
+                <option>Vendedor</option>
+                <option>ATC</option>
+                <option>Comercial Q</option>
+                <option>Cliente exige</option>
+                <option>Torre de control / Logística</option>
+                <option>Sin autorización clara</option>
+              </select>
+            </div>
+            <div class="field"><label for="f_autNombre">Nombre de quien autorizó</label><input type="text" id="f_autNombre" placeholder="Opcional"></div>
+            <div class="full" id="policyFlag" style="grid-column:1/-1;">
+              <div class="policy-flag" id="policyFlagBad">⚠️ <span>Esta decisión va en contra de la regla registrada para este tipo de mercancía. El caso se guardará marcado como <strong>fuera de política</strong> para su seguimiento.</span></div>
+              <div class="policy-ok" id="policyFlagGood">✓ <span>Esta decisión está dentro de la regla registrada para este tipo de mercancía.</span></div>
+            </div>
+          </div>
+
+          <div class="formcard full">
+            <h3><span class="num">4</span>Evidencia fotográfica</h3>
+            <div class="photodrop" id="photoDrop">
+              <div>Arrastra fotos aquí o</div>
+              <button type="button" class="btn sm" id="btnPickPhoto" style="margin-top:8px;">Elegir fotos</button>
+              <input type="file" id="photoInput" accept="image/*" multiple style="display:none;">
+              <div class="hint" style="margin-top:8px;">Las imágenes se comprimen automáticamente. Máximo 3 fotos por caso para mantener la bitácora ligera.</div>
+            </div>
+            <div class="thumbs" id="photoThumbs"></div>
+          </div>
+
+          <div class="formcard full">
+            <h3><span class="num">5</span>Registro</h3>
+            <div class="field"><label>Registrado por</label>
+              <div class="hint" id="registradoPorHint" style="margin-top:0;"></div>
+            </div>
+          </div>
+
+          <div class="full" style="grid-column:1/-1; display:flex; gap:10px; margin-top:6px;">
+            <button type="submit" class="btn primary" id="btnSubmitCase">Guardar incidencia</button>
+            <button type="button" class="btn" id="btnClearForm">Limpiar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- LISTA -->
+    <section class="panel" id="panel-lista">
+      <div class="pagehead">
+        <div>
+          <h1>Bitácora</h1>
+          <p>Todos los casos registrados. Da clic en una fila para ver el detalle y el seguimiento.</p>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnExportList">Exportar CSV</button>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field"><label>Buscar</label><input type="text" id="filtroTexto" placeholder="Pedido, ruta, operador..."></div>
+        <div class="field"><label>Tipo</label><select id="filtroTipo"><option value="">Todos</option></select></div>
+        <div class="field"><label>Estatus</label><select id="filtroEstatus"><option value="">Todos</option><option>Abierto</option><option>En seguimiento</option><option>Cerrado</option></select></div>
+        <div class="field"><label>Política</label><select id="filtroPolitica"><option value="">Todos</option><option value="fuera">Fuera de política</option><option value="dentro">Dentro de política</option></select></div>
+      </div>
+      <div class="card" style="padding:0; overflow-x:auto;">
+        <table class="list" id="tablaCasos">
+          <thead><tr>
+            <th>Folio</th><th>Fecha</th><th>Ruta / Pedido</th><th>Mercancía</th><th>Decisión</th><th>Política</th><th>Estatus</th>
+          </tr></thead>
+          <tbody id="tablaCasosBody"></tbody>
+        </table>
+        <div class="empty" id="listaEmpty" style="display:none;">
+          <div class="big">🧾</div>
+          <span id="listaEmptyMsg">Aún no hay incidencias registradas.<br>Usa <strong>+ Nueva incidencia</strong> para capturar la primera.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATALOGO -->
+    <section class="panel" id="panel-catalogo">
+      <div class="pagehead">
+        <div>
+          <h1>Catálogo de mercancía</h1>
+          <p>Define qué tipos de mercancía sí aceptan cambio físico en domicilio y cuáles siempre deben regresarse. Esta regla es la que marca los casos fuera de política.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="catlist" id="catList"></div>
+        <div class="newcat">
+          <div class="field"><label for="cat_nombre">Nuevo tipo de mercancía</label><input type="text" id="cat_nombre" placeholder="Ej. Línea blanca"></div>
+          <div class="field"><label>¿Permite cambio físico en domicilio?</label>
+            <div class="toggle" id="cat_toggle_new"><div class="knob"></div></div>
+          </div>
+          <div class="field" style="flex:1; min-width:200px;"><label for="cat_notas">Notas (opcional)</label><input type="text" id="cat_notas" placeholder="Aclaración de la regla"></div>
+          <button class="btn primary" id="btnAddCat">Agregar</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="overlay" id="drawerOverlay">
+  <div class="drawer" id="drawerContent"></div>
+</div>
+<div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt=""></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var firebaseConfig = {
+    apiKey: "AIzaSyCknsKqrrkK0YCSD9ye9a5sQ6ZhCq22M0c",
+    authDomain: "bitacora-incidencias-d2747.firebaseapp.com",
+    projectId: "bitacora-incidencias-d2747",
+    storageBucket: "bitacora-incidencias-d2747.firebasestorage.app",
+    messagingSenderId: "82358841068",
+    appId: "1:82358841068:web:12f291170e67ab2fbc3fc9"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var auth = firebase.auth();
+  var db = firebase.firestore();
+
+  var STATE = {catalogo:[], casos:[]};
+  var currentUser = null;
+  var currentTab = 'resumen';
+  var pendingPhotos = []; // {id, dataUrl} for the new-case form, not yet saved
+  var selectedCasoId = null;
+  var unsubCatalogo = null, unsubCasos = null;
+  var seededCatalogo = false;
+
+  // ---------- helpers ----------
+  function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4); }
+  function esc(s){ return (s==null?'':String(s)).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function fmtDate(iso){
+    if(!iso) return '—';
+    var d = new Date(iso + (iso.length<=10 ? 'T00:00:00' : ''));
+    if(isNaN(d)) return iso;
+    return d.toLocaleDateString('es-MX', {day:'2-digit', month:'short', year:'numeric'});
+  }
+  function monthKey(iso){ return (iso||'').slice(0,7); }
+  function monthLabel(key){
+    var parts = key.split('-'); if(parts.length<2) return key;
+    var d = new Date(parseInt(parts[0],10), parseInt(parts[1],10)-1, 1);
+    return d.toLocaleDateString('es-MX', {month:'short', year:'2-digit'});
+  }
+  function toast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove('show'); }, 3200);
+  }
+  function catalogoById(id){ return STATE.catalogo.find(function(c){ return c.id===id; }); }
+  function casoById(id){ return STATE.casos.find(function(c){ return c.id===id; }); }
+
+  var DECISIONES = [
+    "Regresada a almacén (según política)",
+    "Cambio físico en domicilio",
+    "Se queda en domicilio sin cambio",
+    "Rechazo total del pedido",
+    "Otro"
+  ];
+  var DECISIONES_RIESGO = ["Cambio físico en domicilio", "Se queda en domicilio sin cambio"];
+
+  function computeFueraDePolitica(tipoId, decision){
+    var tipo = catalogoById(tipoId);
+    if(!tipo) return false;
+    if(tipo.permiteCambioFisico) return false;
+    return DECISIONES_RIESGO.indexOf(decision) !== -1;
+  }
+
+  // ---------- auth ----------
+  function showGate(html){
+    document.getElementById('authGateBody').innerHTML = html;
+    document.getElementById('authGate').classList.remove('hide');
+    document.getElementById('app').classList.remove('show');
+  }
+
+  function renderSignInButton(){
+    showGate(
+      '<p>Inicia sesión con tu cuenta de Google para entrar a la bitácora.</p>' +
+      '<button class="gsignin" id="btnGoogleSignIn">' +
+      '<svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.9 18.9 13 24 13c3.1 0 5.8 1.1 8 3l6-6C34.5 5.1 29.5 3 24 3 16.3 3 9.6 7.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.4 0 10.3-2.1 14-5.5l-6.5-5.5C29.5 35.9 26.9 37 24 37c-5.3 0-9.7-3.3-11.3-8l-6.6 5C9.5 40.6 16.2 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.6l6.5 5.5C41.7 35.5 45 29.9 45 24c0-1.3-.1-2.3-.4-3.5z"/></svg>' +
+      'Iniciar sesión con Google</button>'
+    );
+    document.getElementById('btnGoogleSignIn').onclick = function(){
+      var provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).catch(function(err){
+        toast('No se pudo iniciar sesión: ' + (err.message || err.code || ''));
+      });
+    };
+  }
+
+  function renderNotAllowed(email){
+    showGate(
+      '<p>Tu correo <strong>' + esc(email) + '</strong> todavía no tiene acceso a esta bitácora.<br>Pide que te agreguen y vuelve a intentar.</p>' +
+      '<button class="btn" id="btnSignOutGate">Cerrar sesión</button>'
+    );
+    document.getElementById('btnSignOutGate').onclick = function(){ auth.signOut(); };
+  }
+
+  function enterApp(){
+    document.getElementById('authGate').classList.add('hide');
+    document.getElementById('app').classList.add('show');
+    document.getElementById('whoAmI').textContent = currentUser.displayName || currentUser.email;
+    document.getElementById('registradoPorHint').textContent =
+      'Se guardará como: ' + (currentUser.displayName || currentUser.email);
+    startListeners();
+    var startTab = 'resumen';
+    try{ startTab = sessionStorage.getItem('bitacora-tab') || 'resumen'; }catch(e){}
+    setTab(startTab);
+  }
+
+  auth.onAuthStateChanged(function(user){
+    if(unsubCatalogo){ unsubCatalogo(); unsubCatalogo = null; }
+    if(unsubCasos){ unsubCasos(); unsubCasos = null; }
+    if(!user){
+      currentUser = null;
+      renderSignInButton();
+      return;
+    }
+    var email = (user.email || '').toLowerCase();
+    db.collection('allowedEmails').doc(email).get().then(function(snap){
+      if(snap.exists){
+        currentUser = user;
+        enterApp();
+      } else {
+        renderNotAllowed(user.email);
+      }
+    }).catch(function(err){
+      if(err.code === 'permission-denied'){
+        renderNotAllowed(user.email);
+      } else {
+        showGate('<p>No se pudo verificar tu acceso. Recarga la página.</p><button class="btn" id="btnSignOutGate">Cerrar sesión</button>');
+        var b = document.getElementById('btnSignOutGate');
+        if(b) b.onclick = function(){ auth.signOut(); };
+      }
+    });
+  });
+
+  document.getElementById('btnSignOut').addEventListener('click', function(){ auth.signOut(); });
+
+  // ---------- realtime data ----------
+  function startListeners(){
+    unsubCatalogo = db.collection('catalogo').onSnapshot(function(snap){
+      STATE.catalogo = snap.docs.map(function(d){ var data = d.data(); data.id = d.id; return data; });
+      if(!seededCatalogo && snap.empty){
+        seededCatalogo = true;
+        seedDefaultCatalogo();
+      }
+      renderTipoOptions();
+      updateFiltroTipoOptions();
+      if(currentTab==='catalogo') renderCatalogo();
+      if(currentTab==='resumen') renderResumen();
+    }, function(err){ toast('No se pudo sincronizar el catálogo.'); console.error(err); });
+
+    unsubCasos = db.collection('casos').orderBy('creadoEn','desc').onSnapshot(function(snap){
+      STATE.casos = snap.docs.map(function(d){ var data = d.data(); data.id = d.id; return data; });
+      if(currentTab==='resumen') renderResumen();
+      if(currentTab==='graficas') renderGraficas();
+      if(currentTab==='lista') renderLista();
+      if(selectedCasoId && casoById(selectedCasoId)) renderDrawer();
+    }, function(err){ toast('No se pudo sincronizar la bitácora.'); console.error(err); });
+  }
+
+  function seedDefaultCatalogo(){
+    var defaults = [
+      {nombre:'Almacén A', permiteCambioFisico:false, notas:''},
+      {nombre:'Almacén K', permiteCambioFisico:false, notas:''},
+      {nombre:'Almacén Q', permiteCambioFisico:false, notas:''}
+    ];
+    defaults.forEach(function(d){ db.collection('catalogo').doc().set(d).catch(function(){}); });
+  }
+
+  // ---------- image compression ----------
+  var MAX_PHOTOS = 3;
+  function compressImage(file){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var img = new Image();
+        img.onload = function(){
+          var maxDim = 700;
+          var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+          var w = Math.max(1, Math.round(img.width * scale));
+          var h = Math.max(1, Math.round(img.height * scale));
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.55));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function handleFiles(fileList){
+    var files = Array.prototype.slice.call(fileList).filter(function(f){ return /^image\//.test(f.type); });
+    if(!files.length) return;
+    if(pendingPhotos.length + files.length > MAX_PHOTOS){
+      toast('Máximo ' + MAX_PHOTOS + ' fotos por caso.');
+      files = files.slice(0, MAX_PHOTOS - pendingPhotos.length);
+      if(!files.length) return;
+    }
+    Promise.all(files.map(compressImage)).then(function(dataUrls){
+      dataUrls.forEach(function(d){ pendingPhotos.push({id: uid(), dataUrl: d}); });
+      renderPendingThumbs();
+    }).catch(function(){ toast('No se pudo procesar una de las imágenes.'); });
+  }
+
+  function renderPendingThumbs(){
+    var wrap = document.getElementById('photoThumbs');
+    wrap.innerHTML = pendingPhotos.map(function(p){
+      return '<div class="thumb"><img src="'+p.dataUrl+'" alt="evidencia"><button type="button" data-remove-pending="'+p.id+'">×</button></div>';
+    }).join('');
+  }
+
+  // ---------- tabs ----------
+  function setTab(tab){
+    currentTab = tab;
+    document.querySelectorAll('.navbtn').forEach(function(b){ b.classList.toggle('active', b.dataset.tab===tab); });
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.toggle('active', p.id==='panel-'+tab); });
+    try{ sessionStorage.setItem('bitacora-tab', tab); }catch(e){}
+    if(tab==='resumen') renderResumen();
+    if(tab==='graficas') renderGraficas();
+    if(tab==='lista') renderLista();
+    if(tab==='catalogo') renderCatalogo();
+    if(tab==='nueva') renderTipoOptions();
+  }
+
+  // ---------- form: nueva incidencia ----------
+  function renderTipoOptions(){
+    var sel = document.getElementById('f_tipo');
+    var current = sel.value;
+    sel.innerHTML = STATE.catalogo.map(function(c){
+      return '<option value="'+c.id+'">'+esc(c.nombre)+'</option>';
+    }).join('');
+    if(current) sel.value = current;
+    updatePolicyHint();
+  }
+
+  function renderDecisionGrid(){
+    var grid = document.getElementById('decisionGrid');
+    grid.innerHTML = DECISIONES.map(function(d, i){
+      return '<label class="radiochip"><input type="radio" name="decision" value="'+esc(d)+'" '+(i===0?'checked':'')+'>'+esc(d)+'</label>';
+    }).join('');
+  }
+
+  function getSelectedDecision(){
+    var r = document.querySelector('input[name=decision]:checked');
+    return r ? r.value : DECISIONES[0];
+  }
+
+  function updatePolicyHint(){
+    var tipoId = document.getElementById('f_tipo').value;
+    var tipo = catalogoById(tipoId);
+    var hint = document.getElementById('tipoRuleHint');
+    if(tipo){
+      hint.textContent = tipo.permiteCambioFisico
+        ? 'Regla actual: SÍ permite cambio físico en domicilio.'
+        : 'Regla actual: NO permite cambio físico — debe regresarse.';
+    } else { hint.textContent = ''; }
+    var decision = getSelectedDecision();
+    var fuera = computeFueraDePolitica(tipoId, decision);
+    document.getElementById('policyFlagBad').classList.toggle('show', fuera);
+    document.getElementById('policyFlagGood').classList.toggle('show', !fuera && !!tipo);
+  }
+
+  function resetForm(){
+    document.getElementById('caseForm').reset();
+    document.getElementById('f_fecha').value = new Date().toISOString().slice(0,10);
+    pendingPhotos = [];
+    renderPendingThumbs();
+    renderDecisionGrid();
+    renderTipoOptions();
+  }
+
+  function submitCaseForm(ev){
+    ev.preventDefault();
+    var tipoId = document.getElementById('f_tipo').value;
+    var decision = getSelectedDecision();
+    var fuera = computeFueraDePolitica(tipoId, decision);
+    var caso = {
+      fechaRegistro: document.getElementById('f_fecha').value || new Date().toISOString().slice(0,10),
+      ruta: document.getElementById('f_ruta').value.trim(),
+      operador: document.getElementById('f_operador').value.trim(),
+      numeroPedido: document.getElementById('f_pedido').value.trim(),
+      tipoMercanciaId: tipoId,
+      tipoMercanciaNombre: (catalogoById(tipoId)||{}).nombre || '—',
+      descripcionDano: document.getElementById('f_dano').value.trim(),
+      decision: decision,
+      autorizadoPor: document.getElementById('f_autPor').value,
+      autorizadoNombre: document.getElementById('f_autNombre').value.trim(),
+      fueraDePolitica: fuera,
+      registradoPor: currentUser.displayName || currentUser.email,
+      registradoPorEmail: currentUser.email,
+      estatus: 'Abierto',
+      fotos: pendingPhotos.slice(),
+      seguimientos: [],
+      creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    var approxSize = JSON.stringify(caso).length;
+    if(approxSize > 230000){
+      toast('El caso es muy pesado (demasiadas fotos). Quita alguna foto e intenta de nuevo.');
+      return;
+    }
+    var btn = document.getElementById('btnSubmitCase');
+    btn.disabled = true;
+    var casoRef = db.collection('casos').doc();
+    var counterRef = db.doc('meta/counters');
+    db.runTransaction(function(tx){
+      return tx.get(counterRef).then(function(snap){
+        var next = (snap.exists && snap.data().folioSeq ? snap.data().folioSeq : 0) + 1;
+        tx.set(counterRef, {folioSeq: next}, {merge:true});
+        caso.folio = 'BR-' + String(next).padStart(4,'0');
+        tx.set(casoRef, caso);
+        return caso.folio;
+      });
+    }).then(function(folio){
+      toast('Incidencia ' + folio + ' guardada.');
+      resetForm();
+      setTab('lista');
+    }).catch(function(err){
+      console.error(err);
+      toast('No se pudo guardar. Intenta de nuevo.');
+    }).finally(function(){
+      btn.disabled = false;
+    });
+  }
+
+  // ---------- dashboard ----------
+  function renderResumen(){
+    var casos = STATE.casos;
+    var total = casos.length;
+    var fuera = casos.filter(function(c){ return c.fueraDePolitica; }).length;
+    var abiertos = casos.filter(function(c){ return c.estatus==='Abierto'; }).length;
+    var enSeg = casos.filter(function(c){ return c.estatus==='En seguimiento'; }).length;
+    var cerrados = casos.filter(function(c){ return c.estatus==='Cerrado'; }).length;
+    var pct = total ? Math.round(fuera/total*100) : 0;
+
+    document.getElementById('statTiles').innerHTML = [
+      tile(total, 'Casos totales', ''),
+      tile(fuera + ' · ' + pct + '%', 'Fuera de política', 'crit'),
+      tile(abiertos, 'Abiertos', 'warn'),
+      tile(enSeg, 'En seguimiento', 'warn'),
+      tile(cerrados, 'Cerrados', 'ok')
+    ].join('');
+
+    var autMap = {};
+    casos.filter(function(c){return c.fueraDePolitica;}).forEach(function(c){
+      var k = c.autorizadoPor || 'Sin especificar';
+      autMap[k] = (autMap[k]||0)+1;
+    });
+    document.getElementById('breakdownAutoriza').innerHTML = renderBars(autMap, fuera, true);
+
+    var tipoMap = {};
+    casos.forEach(function(c){
+      var k = c.tipoMercanciaNombre || '—';
+      tipoMap[k] = (tipoMap[k]||0)+1;
+    });
+    document.getElementById('breakdownTipo').innerHTML = renderBars(tipoMap, total, false);
+
+    var now = new Date();
+    var months = [];
+    for(var i=5;i>=0;i--){
+      var d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+      months.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));
+    }
+    var mesMap = {};
+    months.forEach(function(m){ mesMap[m]=0; });
+    casos.forEach(function(c){
+      var k = monthKey(c.fechaRegistro);
+      if(mesMap.hasOwnProperty(k)) mesMap[k]++;
+    });
+    var maxMes = Math.max.apply(null, months.map(function(m){return mesMap[m];}).concat([1]));
+    document.getElementById('breakdownMes').innerHTML = months.map(function(m){
+      var v = mesMap[m];
+      var w = Math.round(v/maxMes*100);
+      return '<div class="barrow"><div class="lbl"><span>'+monthLabel(m)+'</span><span class="count">'+v+'</span></div><div class="track"><div class="fill" style="width:'+w+'%"></div></div></div>';
+    }).join('');
+  }
+
+  // ---------- gráficas (pestaña dedicada) ----------
+  function renderGraficas(){
+    document.getElementById('stackChart').innerHTML = buildStackedBar(STATE.casos);
+  }
+
+  function buildStackedBar(casos){
+    if(!casos.length) return '<p class="hint" style="margin:0;">Sin datos todavía.</p>';
+
+    var decisionTotals = {}, matrix = {}, autTotals = {};
+    casos.forEach(function(c){
+      var d = c.decision || 'Otro';
+      var a = c.autorizadoPor || 'Sin especificar';
+      matrix[d] = matrix[d] || {};
+      matrix[d][a] = (matrix[d][a]||0) + 1;
+      decisionTotals[d] = (decisionTotals[d]||0) + 1;
+      autTotals[a] = (autTotals[a]||0) + 1;
+    });
+
+    var autorizadores = Object.keys(autTotals).sort(function(a,b){ return autTotals[b]-autTotals[a]; }).slice(0,6);
+    var colorOf = {};
+    autorizadores.forEach(function(a,i){ colorOf[a] = 'var(--cat-'+(i+1)+')'; });
+
+    var decisions = Object.keys(decisionTotals).sort(function(a,b){ return decisionTotals[b]-decisionTotals[a]; });
+    var maxTotal = Math.max.apply(null, decisions.map(function(d){ return decisionTotals[d]; }));
+
+    var rows = decisions.map(function(d){
+      var total = decisionTotals[d];
+      var widthPct = Math.max(6, Math.round(total/maxTotal*100));
+      var segs = autorizadores.map(function(a){
+        var v = matrix[d][a] || 0;
+        if(!v) return '';
+        return '<div class="stackbar-seg" style="flex:'+v+' 0 auto; background:'+colorOf[a]+'" title="'+esc(a)+': '+v+'"></div>';
+      }).join('');
+      return '<div class="stackbar-row">'
+        + '<div class="stackbar-label"><span>'+esc(d)+'</span><span class="total mono">'+total+'</span></div>'
+        + '<div class="stackbar-track" style="width:'+widthPct+'%">'+segs+'</div>'
+        + '</div>';
+    }).join('');
+
+    var legend = '<ul class="stackbar-legend">' + autorizadores.map(function(a){
+      return '<li><span class="swatch" style="background:'+colorOf[a]+'"></span><span>'+esc(a)+'</span><span class="cnt">'+autTotals[a]+'</span></li>';
+    }).join('') + '</ul>';
+
+    return '<div class="stackbar">' + rows + '</div>' + legend;
+  }
+
+  function tile(v, l, cls){
+    return '<div class="stat '+(cls||'')+'"><div class="v mono">'+v+'</div><div class="l">'+esc(l)+'</div></div>';
+  }
+
+  function renderBars(map, total, critColor){
+    var keys = Object.keys(map).sort(function(a,b){ return map[b]-map[a]; });
+    if(!keys.length) return '<p class="hint" style="margin:0;">Sin datos todavía.</p>';
+    var max = Math.max.apply(null, keys.map(function(k){return map[k];}));
+    return keys.map(function(k){
+      var v = map[k];
+      var w = Math.round(v/max*100);
+      return '<div class="barrow"><div class="lbl"><span>'+esc(k)+'</span><span class="count">'+v+'</span></div><div class="track"><div class="fill'+(critColor?' crit':'')+'" style="width:'+w+'%"></div></div></div>';
+    }).join('');
+  }
+
+  // ---------- lista ----------
+  function updateFiltroTipoOptions(){
+    var sel = document.getElementById('filtroTipo');
+    var current = sel.value;
+    sel.innerHTML = '<option value="">Todos</option>' + STATE.catalogo.map(function(c){
+      return '<option value="'+esc(c.nombre)+'">'+esc(c.nombre)+'</option>';
+    }).join('');
+    sel.value = current;
+  }
+
+  function filteredCasos(){
+    var texto = document.getElementById('filtroTexto').value.trim().toLowerCase();
+    var tipo = document.getElementById('filtroTipo').value;
+    var estatus = document.getElementById('filtroEstatus').value;
+    var politica = document.getElementById('filtroPolitica').value;
+    return STATE.casos.filter(function(c){
+      if(texto){
+        var hay = ((c.numeroPedido||'')+' '+(c.ruta||'')+' '+(c.operador||'')+' '+(c.folio||'')).toLowerCase();
+        if(hay.indexOf(texto)===-1) return false;
+      }
+      if(tipo && c.tipoMercanciaNombre !== tipo) return false;
+      if(estatus && c.estatus !== estatus) return false;
+      if(politica==='fuera' && !c.fueraDePolitica) return false;
+      if(politica==='dentro' && c.fueraDePolitica) return false;
+      return true;
+    });
+  }
+
+  function estatusPill(estatus){
+    var cls = estatus==='Cerrado' ? 'ok' : (estatus==='En seguimiento' ? 'warn' : 'neutral');
+    return '<span class="pill '+cls+'"><span class="dot"></span>'+esc(estatus)+'</span>';
+  }
+
+  function renderLista(){
+    var list = filteredCasos();
+    var body = document.getElementById('tablaCasosBody');
+    document.getElementById('listaEmpty').style.display = list.length ? 'none' : 'block';
+    if(!list.length){
+      document.getElementById('listaEmptyMsg').innerHTML = STATE.casos.length
+        ? 'Ningún caso coincide con estos filtros.'
+        : 'Aún no hay incidencias registradas.<br>Usa <strong>+ Nueva incidencia</strong> para capturar la primera.';
+    }
+    body.innerHTML = list.map(function(c){
+      return '<tr data-open="'+c.id+'">'
+        + '<td class="folio">'+esc(c.folio)+'</td>'
+        + '<td class="mono">'+fmtDate(c.fechaRegistro)+'</td>'
+        + '<td>'+esc(c.ruta)+'<div class="muted">'+esc(c.numeroPedido)+'</div></td>'
+        + '<td>'+esc(c.tipoMercanciaNombre)+'</td>'
+        + '<td>'+esc(c.decision)+'</td>'
+        + '<td>'+(c.fueraDePolitica ? '<span class="pill crit">Fuera</span>' : '<span class="pill ok">En regla</span>')+'</td>'
+        + '<td>'+estatusPill(c.estatus)+'</td>'
+        + '</tr>';
+    }).join('');
+  }
+
+  function csvEscape(v){
+    v = (v==null?'':String(v));
+    if(/[",\n]/.test(v)) return '"'+v.replace(/"/g,'""')+'"';
+    return v;
+  }
+
+  function exportCsv(list, filename){
+    var cols = ['folio','fechaRegistro','ruta','operador','numeroPedido','tipoMercanciaNombre','descripcionDano','decision','autorizadoPor','autorizadoNombre','fueraDePolitica','estatus','registradoPor'];
+    var headers = ['Folio','Fecha','Ruta/Unidad','Operador','Número de pedido','Tipo de mercancía','Descripción del daño','Decisión','Autorizó','Nombre','Fuera de política','Estatus','Registrado por'];
+    var rows = [headers.join(',')].concat(list.map(function(c){
+      return cols.map(function(k){
+        var v = c[k];
+        if(k==='fueraDePolitica') v = v ? 'Sí' : 'No';
+        return csvEscape(v);
+      }).join(',');
+    }));
+    var csv = '﻿' + rows.join('\r\n');
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+
+  // ---------- drawer / detalle ----------
+  function openCaso(id){
+    selectedCasoId = id;
+    renderDrawer();
+    document.getElementById('drawerOverlay').classList.add('show');
+  }
+  function closeDrawer(){
+    document.getElementById('drawerOverlay').classList.remove('show');
+    selectedCasoId = null;
+  }
+
+  function renderDrawer(){
+    var c = casoById(selectedCasoId);
+    if(!c) return;
+    var estatusOptions = ['Abierto','En seguimiento','Cerrado'].map(function(s){
+      return '<option value="'+s+'" '+(s===c.estatus?'selected':'')+'>'+s+'</option>';
+    }).join('');
+    var html = ''
+      + '<div class="drawer-head"><div>'
+      + '<div class="pill '+(c.fueraDePolitica?'crit':'ok')+'" style="margin-bottom:8px;">'+(c.fueraDePolitica?'Fuera de política':'En regla')+'</div>'
+      + '<h2 class="folio">'+esc(c.folio)+'</h2>'
+      + '<div class="muted mono">'+fmtDate(c.fechaRegistro)+'</div>'
+      + '</div><button class="closebtn" id="btnCloseDrawer">×</button></div>'
+      + '<dl class="kv">'
+      + '<dt>Ruta / Unidad</dt><dd>'+esc(c.ruta)+'</dd>'
+      + '<dt>Operador</dt><dd>'+esc(c.operador||'—')+'</dd>'
+      + '<dt>Número de pedido</dt><dd>'+esc(c.numeroPedido)+'</dd>'
+      + '<dt>Mercancía</dt><dd>'+esc(c.tipoMercanciaNombre)+'</dd>'
+      + '<dt>Daño reportado</dt><dd>'+esc(c.descripcionDano)+'</dd>'
+      + '<dt>Decisión</dt><dd>'+esc(c.decision)+'</dd>'
+      + '<dt>Autorizó</dt><dd>'+esc(c.autorizadoPor)+(c.autorizadoNombre?' — '+esc(c.autorizadoNombre):'')+'</dd>'
+      + '<dt>Registrado por</dt><dd>'+esc(c.registradoPor)+'</dd>'
+      + '</dl>'
+      + '<div class="field" style="max-width:220px;"><label>Estatus</label><select id="drawerEstatus">'+estatusOptions+'</select></div>'
+      + (c.fotos && c.fotos.length ? '<div class="seg"><h3>Evidencia fotográfica</h3><div class="drawerphotos">'+c.fotos.map(function(f){return '<img src="'+f.dataUrl+'" data-zoom="'+f.dataUrl+'" alt="evidencia">';}).join('')+'</div></div>' : '')
+      + '<div class="seg"><h3>Seguimiento</h3>'
+      + (c.seguimientos && c.seguimientos.length ? c.seguimientos.map(function(s){
+          return '<div class="segitem"><div class="meta"><span>'+esc(s.autor||'—')+'</span><span>'+fmtDate(s.fecha)+'</span></div>'+esc(s.nota)+'</div>';
+        }).join('') : '<p class="hint">Sin notas de seguimiento todavía.</p>')
+      + '<div class="segform"><textarea id="segNota" placeholder="Agregar nota de seguimiento (ATC, vendedor, Comercial Q...)" rows="2"></textarea></div>'
+      + '<div style="display:flex; gap:8px; margin-top:8px;"><button class="btn primary sm" id="btnAddSeg">Agregar nota (como '+esc(currentUser.displayName || currentUser.email)+')</button></div>'
+      + '</div>';
+    document.getElementById('drawerContent').innerHTML = html;
+    document.getElementById('btnCloseDrawer').onclick = closeDrawer;
+    document.getElementById('drawerEstatus').onchange = function(){
+      db.collection('casos').doc(c.id).update({estatus: this.value}).then(function(){
+        toast('Estatus actualizado.');
+      }).catch(function(){ toast('No se pudo actualizar.'); });
+    };
+    document.getElementById('btnAddSeg').onclick = function(){
+      var nota = document.getElementById('segNota').value.trim();
+      if(!nota) return;
+      var entry = {id: uid(), fecha: new Date().toISOString().slice(0,10), autor: currentUser.displayName || currentUser.email, nota: nota};
+      db.collection('casos').doc(c.id).update({
+        seguimientos: firebase.firestore.FieldValue.arrayUnion(entry)
+      }).then(function(){
+        toast('Nota agregada.');
+      }).catch(function(){ toast('No se pudo guardar la nota.'); });
+    };
+    document.querySelectorAll('[data-zoom]').forEach(function(img){
+      img.onclick = function(){
+        document.getElementById('lightboxImg').src = this.dataset.zoom;
+        document.getElementById('lightbox').classList.add('show');
+      };
+    });
+  }
+
+  // ---------- catalogo ----------
+  function renderCatalogo(){
+    var wrap = document.getElementById('catList');
+    wrap.innerHTML = STATE.catalogo.map(function(c){
+      return '<div class="catrow">'
+        + '<div><div class="name">'+esc(c.nombre)+'</div>'+(c.notas?'<div class="notes">'+esc(c.notas)+'</div>':'')+'</div>'
+        + '<div class="toggle'+(c.permiteCambioFisico?' on':'')+'" data-toggle-cat="'+c.id+'"><div class="knob"></div></div>'
+        + '<span class="pill '+(c.permiteCambioFisico?'ok':'crit')+'">'+(c.permiteCambioFisico?'Permite cambio':'Debe regresarse')+'</span>'
+        + '<button class="btn sm danger" data-del-cat="'+c.id+'">Eliminar</button>'
+        + '</div>';
+    }).join('');
+  }
+
+  // ---------- events ----------
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.navbtn').forEach(function(b){
+      b.addEventListener('click', function(){ setTab(this.dataset.tab); });
+    });
+
+    document.getElementById('caseForm').addEventListener('submit', submitCaseForm);
+    document.getElementById('btnClearForm').addEventListener('click', resetForm);
+    document.getElementById('f_tipo').addEventListener('change', updatePolicyHint);
+    document.getElementById('decisionGrid').addEventListener('change', updatePolicyHint);
+
+    document.getElementById('btnPickPhoto').addEventListener('click', function(){ document.getElementById('photoInput').click(); });
+    document.getElementById('photoInput').addEventListener('change', function(e){ handleFiles(e.target.files); e.target.value=''; });
+    var drop = document.getElementById('photoDrop');
+    drop.addEventListener('dragover', function(e){ e.preventDefault(); drop.classList.add('drag'); });
+    drop.addEventListener('dragleave', function(){ drop.classList.remove('drag'); });
+    drop.addEventListener('drop', function(e){ e.preventDefault(); drop.classList.remove('drag'); handleFiles(e.dataTransfer.files); });
+    document.getElementById('photoThumbs').addEventListener('click', function(e){
+      var id = e.target.getAttribute && e.target.getAttribute('data-remove-pending');
+      if(id){ pendingPhotos = pendingPhotos.filter(function(p){return p.id!==id;}); renderPendingThumbs(); }
+    });
+
+    document.getElementById('btnExportSummary').addEventListener('click', function(){
+      exportCsv(STATE.casos, 'bitacora-ruta-completa-'+new Date().toISOString().slice(0,10)+'.csv');
+    });
+    document.getElementById('btnExportList').addEventListener('click', function(){
+      exportCsv(filteredCasos(), 'bitacora-ruta-'+new Date().toISOString().slice(0,10)+'.csv');
+    });
+
+    ['filtroTexto','filtroTipo','filtroEstatus','filtroPolitica'].forEach(function(id){
+      document.getElementById(id).addEventListener('input', renderLista);
+      document.getElementById(id).addEventListener('change', renderLista);
+    });
+    document.getElementById('tablaCasosBody').addEventListener('click', function(e){
+      var tr = e.target.closest('tr[data-open]');
+      if(tr) openCaso(tr.getAttribute('data-open'));
+    });
+    document.getElementById('drawerOverlay').addEventListener('click', function(e){
+      if(e.target.id === 'drawerOverlay') closeDrawer();
+    });
+    document.getElementById('lightbox').addEventListener('click', function(){ this.classList.remove('show'); });
+
+    // catalogo
+    var newToggleOn = false;
+    document.getElementById('cat_toggle_new').addEventListener('click', function(){
+      newToggleOn = !newToggleOn;
+      this.classList.toggle('on', newToggleOn);
+    });
+    document.getElementById('btnAddCat').addEventListener('click', function(){
+      var nombre = document.getElementById('cat_nombre').value.trim();
+      if(!nombre){ toast('Escribe un nombre de mercancía.'); return; }
+      var item = {nombre: nombre, permiteCambioFisico: newToggleOn, notas: document.getElementById('cat_notas').value.trim()};
+      db.collection('catalogo').doc().set(item).then(function(){
+        toast('Categoría agregada.');
+        document.getElementById('cat_nombre').value=''; document.getElementById('cat_notas').value='';
+        newToggleOn=false; document.getElementById('cat_toggle_new').classList.remove('on');
+      }).catch(function(){ toast('No se pudo agregar.'); });
+    });
+    document.getElementById('catList').addEventListener('click', function(e){
+      var toggleId = e.target.closest('[data-toggle-cat]');
+      var delId = e.target.closest('[data-del-cat]');
+      if(toggleId){
+        var id = toggleId.getAttribute('data-toggle-cat');
+        var item = catalogoById(id);
+        db.collection('catalogo').doc(id).update({permiteCambioFisico: !item.permiteCambioFisico}).catch(function(){ toast('No se pudo actualizar.'); });
+      }
+      if(delId){
+        var did = delId.getAttribute('data-del-cat');
+        db.collection('catalogo').doc(did).delete().then(function(){
+          toast('Categoría eliminada.');
+        }).catch(function(){ toast('No se pudo eliminar.'); });
+      }
+    });
+
+    // init
+    renderDecisionGrid();
+    document.getElementById('f_fecha').value = new Date().toISOString().slice(0,10);
+  });
+})();
+</script>
+</body>
+</html>
