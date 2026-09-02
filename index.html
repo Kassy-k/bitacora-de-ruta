@@ -236,6 +236,10 @@
   .authform .btn.primary{width:100%; justify-content:center; margin-top:4px;}
   .authlink{background:none; border:none; color:var(--accent); font-size:12.5px; font-weight:600; padding:0; margin-top:14px; cursor:pointer;}
   .autherr{color:var(--crit); font-size:12.5px; margin:-6px 0 12px; text-align:left;}
+  .pwmodal{position:fixed; inset:0; background:rgba(20,20,18,.42); display:none; align-items:center; justify-content:center; z-index:110; padding:20px;}
+  .pwmodal.show{display:flex;}
+  .pwmodal .authcard{text-align:center; max-width:340px;}
+  .pwok{color:var(--ok); font-size:12.5px; margin:-6px 0 12px; text-align:left;}
 
   ::-webkit-scrollbar{width:10px; height:10px;}
   ::-webkit-scrollbar-thumb{background:var(--surface-3); border-radius:99px;}
@@ -263,6 +267,20 @@
   </div>
 </div>
 
+<div class="pwmodal" id="pwModal">
+  <div class="authcard">
+    <div class="mark" style="font-size:18px;">Cambiar contraseña</div>
+    <form class="authform" id="pwForm" novalidate>
+      <div class="autherr" id="pwErr" style="display:none;"></div>
+      <div class="field"><label for="pw_old">Contraseña actual</label><input type="password" id="pw_old" autocomplete="current-password" required></div>
+      <div class="field"><label for="pw_new">Contraseña nueva</label><input type="password" id="pw_new" autocomplete="new-password" required></div>
+      <div class="field"><label for="pw_new2">Confirmar contraseña nueva</label><input type="password" id="pw_new2" autocomplete="new-password" required></div>
+      <button type="submit" class="btn primary">Guardar</button>
+    </form>
+    <button type="button" class="authlink" id="btnPwCancel">Cancelar</button>
+  </div>
+</div>
+
 <div id="app">
 
   <nav class="side">
@@ -277,6 +295,7 @@
     <button class="navbtn" data-tab="catalogo">Catálogo de mercancía</button>
     <div class="side-foot">
       <span class="who" id="whoAmI"></span>
+      <button type="button" id="btnChangePass" style="margin-right:12px;">Cambiar contraseña</button>
       <button type="button" id="btnSignOut">Cerrar sesión</button>
     </div>
   </nav>
@@ -629,6 +648,54 @@
   });
 
   document.getElementById('btnSignOut').addEventListener('click', function(){ auth.signOut(); });
+
+  // ---------- change password (in-app, no email link needed) ----------
+  function openPwModal(){
+    document.getElementById('pw_old').value = '';
+    document.getElementById('pw_new').value = '';
+    document.getElementById('pw_new2').value = '';
+    var err = document.getElementById('pwErr');
+    err.style.display = 'none'; err.className = 'autherr'; err.textContent = '';
+    document.getElementById('pwModal').classList.add('show');
+  }
+  function closePwModal(){ document.getElementById('pwModal').classList.remove('show'); }
+
+  document.getElementById('btnChangePass').addEventListener('click', openPwModal);
+  document.getElementById('btnPwCancel').addEventListener('click', closePwModal);
+
+  document.getElementById('pwForm').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var err = document.getElementById('pwErr');
+    err.style.display = 'none'; err.className = 'autherr'; err.textContent = '';
+    var oldPass = document.getElementById('pw_old').value;
+    var newPass = document.getElementById('pw_new').value;
+    var newPass2 = document.getElementById('pw_new2').value;
+    if(newPass.length < 6){
+      err.textContent = 'La contraseña nueva debe tener al menos 6 caracteres.';
+      err.style.display = 'block';
+      return;
+    }
+    if(newPass !== newPass2){
+      err.textContent = 'Las dos contraseñas nuevas no coinciden.';
+      err.style.display = 'block';
+      return;
+    }
+    var user = auth.currentUser;
+    if(!user){ closePwModal(); return; }
+    var cred = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+    user.reauthenticateWithCredential(cred).then(function(){
+      return user.updatePassword(newPass);
+    }).then(function(){
+      err.className = 'pwok';
+      err.textContent = 'Listo, tu contraseña se cambió.';
+      err.style.display = 'block';
+      setTimeout(closePwModal, 1400);
+    }).catch(function(e){
+      err.className = 'autherr';
+      err.textContent = authErrMsg(e);
+      err.style.display = 'block';
+    });
+  });
 
   // ---------- realtime data ----------
   function startListeners(){
