@@ -229,6 +229,13 @@
   .gsignin{display:inline-flex; align-items:center; gap:10px; background:#fff; color:#3c4043; border:1px solid #dadce0; border-radius:8px; padding:10px 18px; font-weight:600; font-size:14px;}
   .gsignin:hover{box-shadow:0 1px 3px rgba(0,0,0,.15);}
   .gsignin svg{width:18px; height:18px;}
+  .authform{text-align:left;}
+  .authform .field{margin-bottom:12px;}
+  .authform label{font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-bottom:5px;}
+  .authform input{border-radius:7px; border:1px solid var(--border); background:var(--surface); color:var(--ink); padding:9px 11px; font-size:14px; font-family:inherit;}
+  .authform .btn.primary{width:100%; justify-content:center; margin-top:4px;}
+  .authlink{background:none; border:none; color:var(--accent); font-size:12.5px; font-weight:600; padding:0; margin-top:14px; cursor:pointer;}
+  .autherr{color:var(--crit); font-size:12.5px; margin:-6px 0 12px; text-align:left;}
 
   ::-webkit-scrollbar{width:10px; height:10px;}
   ::-webkit-scrollbar-thumb{background:var(--surface-3); border-radius:99px;}
@@ -533,27 +540,68 @@
     document.getElementById('app').classList.remove('show');
   }
 
-  function renderSignInButton(){
+  function authErrMsg(err){
+    var code = err && err.code;
+    if(code === 'auth/invalid-email') return 'Ese correo no es válido.';
+    if(code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/wrong-password') return 'Correo o contraseña incorrectos.';
+    if(code === 'auth/too-many-requests') return 'Demasiados intentos. Espera un momento y vuelve a intentar.';
+    if(code === 'auth/missing-password') return 'Escribe tu contraseña.';
+    return 'No se pudo iniciar sesión: ' + (err && (err.message || err.code) || '');
+  }
+
+  function renderSignInForm(){
     showGate(
-      '<p>Inicia sesión con tu cuenta de Google para entrar a la bitácora.</p>' +
-      '<button class="gsignin" id="btnGoogleSignIn">' +
-      '<svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C34.5 5.1 29.5 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.9 18.9 13 24 13c3.1 0 5.8 1.1 8 3l6-6C34.5 5.1 29.5 3 24 3 16.3 3 9.6 7.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 45c5.4 0 10.3-2.1 14-5.5l-6.5-5.5C29.5 35.9 26.9 37 24 37c-5.3 0-9.7-3.3-11.3-8l-6.6 5C9.5 40.6 16.2 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.6l6.5 5.5C41.7 35.5 45 29.9 45 24c0-1.3-.1-2.3-.4-3.5z"/></svg>' +
-      'Iniciar sesión con Google</button>'
+      '<form class="authform" id="signInForm" novalidate>' +
+        '<div class="autherr" id="signInErr" style="display:none;"></div>' +
+        '<div class="field"><label for="si_email">Correo</label><input type="email" id="si_email" autocomplete="username" required></div>' +
+        '<div class="field"><label for="si_pass">Contraseña</label><input type="password" id="si_pass" autocomplete="current-password" required></div>' +
+        '<button type="submit" class="btn primary">Entrar</button>' +
+      '</form>' +
+      '<button type="button" class="authlink" id="btnForgotPass">¿Olvidaste tu contraseña?</button>'
     );
-    document.getElementById('btnGoogleSignIn').onclick = function(){
-      var provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).catch(function(err){
-        toast('No se pudo iniciar sesión: ' + (err.message || err.code || ''));
+    var errBox = document.getElementById('signInErr');
+    document.getElementById('signInForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      errBox.style.display = 'none';
+      var email = document.getElementById('si_email').value.trim();
+      var pass = document.getElementById('si_pass').value;
+      auth.signInWithEmailAndPassword(email, pass).catch(function(err){
+        errBox.textContent = authErrMsg(err);
+        errBox.style.display = 'block';
       });
+    });
+    document.getElementById('btnForgotPass').onclick = function(){
+      renderForgotPassword();
     };
   }
 
-  function renderNotAllowed(email){
+  function renderForgotPassword(){
     showGate(
-      '<p>Tu correo <strong>' + esc(email) + '</strong> todavía no tiene acceso a esta bitácora.<br>Pide que te agreguen y vuelve a intentar.</p>' +
-      '<button class="btn" id="btnSignOutGate">Cerrar sesión</button>'
+      '<p>Escribe tu correo y te mandaremos un enlace para poner una contraseña nueva.</p>' +
+      '<form class="authform" id="forgotForm" novalidate>' +
+        '<div class="autherr" id="forgotErr" style="display:none;"></div>' +
+        '<div class="field"><label for="fp_email">Correo</label><input type="email" id="fp_email" autocomplete="username" required></div>' +
+        '<button type="submit" class="btn primary">Enviar enlace</button>' +
+      '</form>' +
+      '<button type="button" class="authlink" id="btnBackToSignIn">Volver a iniciar sesión</button>'
     );
-    document.getElementById('btnSignOutGate').onclick = function(){ auth.signOut(); };
+    var errBox = document.getElementById('forgotErr');
+    document.getElementById('forgotForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      errBox.style.display = 'none';
+      var email = document.getElementById('fp_email').value.trim();
+      auth.sendPasswordResetEmail(email).then(function(){
+        showGate(
+          '<p>Listo. Si <strong>' + esc(email) + '</strong> tiene una cuenta, le llegará un correo con el enlace para poner su contraseña.</p>' +
+          '<button type="button" class="btn" id="btnBackToSignIn2">Volver a iniciar sesión</button>'
+        );
+        document.getElementById('btnBackToSignIn2').onclick = function(){ renderSignInForm(); };
+      }).catch(function(err){
+        errBox.textContent = authErrMsg(err);
+        errBox.style.display = 'block';
+      });
+    });
+    document.getElementById('btnBackToSignIn').onclick = function(){ renderSignInForm(); };
   }
 
   function enterApp(){
@@ -573,26 +621,11 @@
     if(unsubCasos){ unsubCasos(); unsubCasos = null; }
     if(!user){
       currentUser = null;
-      renderSignInButton();
+      renderSignInForm();
       return;
     }
-    var email = (user.email || '').toLowerCase();
-    db.collection('allowedEmails').doc(email).get().then(function(snap){
-      if(snap.exists){
-        currentUser = user;
-        enterApp();
-      } else {
-        renderNotAllowed(user.email);
-      }
-    }).catch(function(err){
-      if(err.code === 'permission-denied'){
-        renderNotAllowed(user.email);
-      } else {
-        showGate('<p>No se pudo verificar tu acceso. Recarga la página.</p><button class="btn" id="btnSignOutGate">Cerrar sesión</button>');
-        var b = document.getElementById('btnSignOutGate');
-        if(b) b.onclick = function(){ auth.signOut(); };
-      }
-    });
+    currentUser = user;
+    enterApp();
   });
 
   document.getElementById('btnSignOut').addEventListener('click', function(){ auth.signOut(); });
