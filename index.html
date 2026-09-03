@@ -518,9 +518,11 @@
   var auth = firebase.auth();
   var db = firebase.firestore();
 
+  var OWNER_EMAIL = 'kasselatcom@gmail.com'; // única cuenta que puede eliminar incidencias
   var STATE = {catalogo:[], casos:[]};
   var currentUser = null;
   var currentTab = 'resumen';
+  function isOwner(){ return !!currentUser && (currentUser.email||'').toLowerCase() === OWNER_EMAIL; }
   var pendingPhotos = []; // {id, dataUrl} for the new-case form, not yet saved
   var selectedCasoId = null;
   var unsubCatalogo = null, unsubCasos = null;
@@ -1188,7 +1190,7 @@
       + '<div class="pill '+(c.fueraDePolitica?'crit':'ok')+'" style="margin-bottom:8px;">'+(c.fueraDePolitica?'Fuera de política':'En regla')+'</div>'
       + '<h2 class="folio">'+esc(c.folio)+'</h2>'
       + '<div class="muted mono">'+fmtDate(c.fechaRegistro)+'</div>'
-      + '</div><button class="closebtn" id="btnCloseDrawer">×</button></div>'
+      + '</div><div style="display:flex; align-items:center; gap:10px;">' + (isOwner() ? '<button class="btn danger sm" id="btnDeleteCaso">Eliminar</button>' : '') + '<button class="closebtn" id="btnCloseDrawer">×</button></div></div>'
       + '<dl class="kv">'
       + '<dt>Ruta / Unidad</dt><dd>'+esc(c.ruta)+'</dd>'
       + '<dt>Operador</dt><dd>'+esc(c.operador||'—')+'</dd>'
@@ -1210,6 +1212,26 @@
       + '</div>';
     document.getElementById('drawerContent').innerHTML = html;
     document.getElementById('btnCloseDrawer').onclick = closeDrawer;
+    var btnDeleteCaso = document.getElementById('btnDeleteCaso');
+    if(btnDeleteCaso) btnDeleteCaso.onclick = function(){
+      var btn = document.getElementById('btnDeleteCaso');
+      if(!btn.dataset.confirm){
+        btn.dataset.confirm = '1';
+        btn.textContent = '¿Seguro? Confirmar';
+        setTimeout(function(){
+          if(btn && btn.dataset) { btn.dataset.confirm = ''; btn.textContent = 'Eliminar'; }
+        }, 4000);
+        return;
+      }
+      btn.disabled = true;
+      db.collection('casos').doc(c.id).delete().then(function(){
+        toast('Incidencia eliminada.');
+        closeDrawer();
+      }).catch(function(){
+        toast('No se pudo eliminar.');
+        btn.disabled = false;
+      });
+    };
     document.getElementById('drawerEstatus').onchange = function(){
       db.collection('casos').doc(c.id).update({estatus: this.value}).then(function(){
         toast('Estatus actualizado.');
