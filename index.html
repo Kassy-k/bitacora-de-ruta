@@ -281,6 +281,18 @@
   </div>
 </div>
 
+<div class="pwmodal" id="nameModal">
+  <div class="authcard">
+    <div class="mark" style="font-size:18px;">Editar nombre</div>
+    <form class="authform" id="nameEditForm" novalidate>
+      <div class="autherr" id="nameEditErr" style="display:none;"></div>
+      <div class="field"><label for="ne_name">Tu nombre</label><input type="text" id="ne_name" autocomplete="name" required></div>
+      <button type="submit" class="btn primary">Guardar</button>
+    </form>
+    <button type="button" class="authlink" id="btnNameCancel">Cancelar</button>
+  </div>
+</div>
+
 <div id="app">
 
   <nav class="side">
@@ -295,6 +307,7 @@
     <button class="navbtn" data-tab="catalogo">Catálogo de mercancía</button>
     <div class="side-foot">
       <span class="who" id="whoAmI"></span>
+      <button type="button" id="btnEditName" style="margin-right:12px;">Editar nombre</button>
       <button type="button" id="btnChangePass" style="margin-right:12px;">Cambiar contraseña</button>
       <button type="button" id="btnSignOut">Cerrar sesión</button>
     </div>
@@ -623,6 +636,35 @@
     document.getElementById('btnBackToSignIn').onclick = function(){ renderSignInForm(); };
   }
 
+  function renderNamePrompt(){
+    showGate(
+      '<p>Antes de entrar, dinos tu nombre — así se van a guardar tus registros en la bitácora.</p>' +
+      '<form class="authform" id="nameForm" novalidate>' +
+        '<div class="autherr" id="nameErr" style="display:none;"></div>' +
+        '<div class="field"><label for="np_name">Tu nombre</label><input type="text" id="np_name" autocomplete="name" required></div>' +
+        '<button type="submit" class="btn primary">Continuar</button>' +
+      '</form>'
+    );
+    var errBox = document.getElementById('nameErr');
+    document.getElementById('nameForm').addEventListener('submit', function(ev){
+      ev.preventDefault();
+      errBox.style.display = 'none';
+      var name = document.getElementById('np_name').value.trim();
+      if(!name){
+        errBox.textContent = 'Escribe tu nombre.';
+        errBox.style.display = 'block';
+        return;
+      }
+      auth.currentUser.updateProfile({displayName: name}).then(function(){
+        currentUser = auth.currentUser;
+        enterApp();
+      }).catch(function(err){
+        errBox.textContent = 'No se pudo guardar tu nombre: ' + (err.message || err.code || '');
+        errBox.style.display = 'block';
+      });
+    });
+  }
+
   function enterApp(){
     document.getElementById('authGate').classList.add('hide');
     document.getElementById('app').classList.add('show');
@@ -644,7 +686,11 @@
       return;
     }
     currentUser = user;
-    enterApp();
+    if(!user.displayName){
+      renderNamePrompt();
+    } else {
+      enterApp();
+    }
   });
 
   document.getElementById('btnSignOut').addEventListener('click', function(){ auth.signOut(); });
@@ -693,6 +739,44 @@
     }).catch(function(e){
       err.className = 'autherr';
       err.textContent = authErrMsg(e);
+      err.style.display = 'block';
+    });
+  });
+
+  // ---------- edit name ----------
+  function openNameModal(){
+    document.getElementById('ne_name').value = (currentUser && currentUser.displayName) || '';
+    var err = document.getElementById('nameEditErr');
+    err.style.display = 'none'; err.className = 'autherr'; err.textContent = '';
+    document.getElementById('nameModal').classList.add('show');
+  }
+  function closeNameModal(){ document.getElementById('nameModal').classList.remove('show'); }
+
+  document.getElementById('btnEditName').addEventListener('click', openNameModal);
+  document.getElementById('btnNameCancel').addEventListener('click', closeNameModal);
+
+  document.getElementById('nameEditForm').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var err = document.getElementById('nameEditErr');
+    err.style.display = 'none'; err.className = 'autherr'; err.textContent = '';
+    var name = document.getElementById('ne_name').value.trim();
+    if(!name){
+      err.textContent = 'Escribe tu nombre.';
+      err.style.display = 'block';
+      return;
+    }
+    auth.currentUser.updateProfile({displayName: name}).then(function(){
+      currentUser = auth.currentUser;
+      document.getElementById('whoAmI').textContent = currentUser.displayName || currentUser.email;
+      document.getElementById('registradoPorHint').textContent =
+        'Se guardará como: ' + (currentUser.displayName || currentUser.email);
+      err.className = 'pwok';
+      err.textContent = 'Listo, tu nombre se actualizó.';
+      err.style.display = 'block';
+      setTimeout(closeNameModal, 1200);
+    }).catch(function(e){
+      err.className = 'autherr';
+      err.textContent = 'No se pudo guardar: ' + (e.message || e.code || '');
       err.style.display = 'block';
     });
   });
