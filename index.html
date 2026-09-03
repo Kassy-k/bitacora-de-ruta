@@ -1,3 +1,4 @@
+<!doctype html><html><head><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"v":1,"capabilities":{"artifact":"artifact.BYHii2AW.js","assets":"assets.8Gk803W0.js","comments":"comments.BiSa9uTt.js","db":"db.h-3sndFg.js","downloads":"downloads.th1YuAIk.js","embed":"embed.eqL6deQM.js","endpoints":"endpoints.CfzSv5nM.js","mcp":"mcp.Bvma3qD7.js","network":"network.B5UA9Su4.js","permissions":"permissions.BNySkLV5.js","room":"room.VSdFwTE9.js","sample":"sample.BW2Uysoh.js","self":"artifact.BYHii2AW.js","user":"user.BpKav-Rf.js"},"transforms":"_transforms.DSB5x63f.js","comments":"_comments.CySkkG-P.js","translate":"_translate.5HCW4BJh.js","ldx":"_ldx.DYFNSryD.js"}</script><script>(function(){"use strict";var ce=["light","dark","system"],le=/^[A-Za-z0-9_-]{1,64}$/,Z=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,ue=new Set(["class","hidden","value","checked","style","title","alt","placeholder","lang","dir","role","tabindex","disabled","readonly","contenteditable","open","colspan","rowspan"]);function fe(e){const t=e.toLowerCase();return t.startsWith("data-")||t.startsWith("aria-")||ue.has(t)}var He="http://www.w3.org/1999/xhtml",de="http://www.w3.org/2000/svg",pe=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),me=new Set(["script","style"]);function he(e){const t=e.localName.toLowerCase();return e.namespaceURI==="http://www.w3.org/1999/xhtml"?!pe.has(t):e.namespaceURI===de?!me.has(t):!1}function D(e,t){return e===t||(e===160||e===32)&&(t===160||t===32)}function _e(e,t){const r=e.length,n=t.length;let s=0;for(;s<r&&s<n&&D(e.charCodeAt(s),t.charCodeAt(s));)s++;let o=0;for(;o<r-s&&o<n-s&&D(e.charCodeAt(r-1-o),t.charCodeAt(n-1-o));)o++;return{p:s,s:o}}function ve(e,t){const r=e.firstChild;if(e.childNodes.length!==1||r===null||r.nodeType!==Node.TEXT_NODE){e.textContent=t;return}const n=r.data,s=n.length,o=t.length,{p:i,s:c}=_e(n,t);i===s&&c===0&&s===o||r.replaceData(i,s-i-c,t.slice(i,o-c));const m=r.data,d=e.ownerDocument.getSelection?.()??null,v=d!==null&&d.rangeCount>0&&(d.anchorNode===r||d.focusNode===r)?{anchor:d.anchorNode,anchorOffset:d.anchorOffset,focus:d.focusNode,focusOffset:d.focusOffset}:null;let p=-1,y=-1;for(let h=0;h<m.length&&h<t.length;h++){const E=m.charCodeAt(h),A=t.charCodeAt(h);E!==A&&D(E,A)&&(p<0&&(p=h),y=h)}const w=p>=0;if(w&&r.replaceData(p,y-p+1,t.slice(p,y+1)),w&&v!==null&&v.anchor!==null&&v.focus!==null)try{d.setBaseAndExtent(v.anchor,v.anchorOffset,v.focus,v.focusOffset)}catch{}}var ye=new Set(["html","head","body","frameset"]);function we(e){return e.namespaceURI==="http://www.w3.org/1999/xhtml"&&ye.has(e.localName)}function ge(e){if(e===null||typeof e!="object")return!1;const t=e;if(typeof t.target!="string"||!le.test(t.target)||t.text!==void 0&&typeof t.text!="string")return!1;if(t.attrsSet!==void 0){if(t.attrsSet===null||typeof t.attrsSet!="object")return!1;for(const[r,n]of Object.entries(t.attrsSet))if(!Z.test(r)||typeof n!="string")return!1}if(t.attrsRemoved!==void 0){if(!Array.isArray(t.attrsRemoved))return!1;for(const r of t.attrsRemoved)if(typeof r!="string"||!Z.test(r))return!1}return!0}function Ee(e,t){if(e===null||typeof e!="object")return!1;const{seq:r,elements:n}=e;if(typeof r!="number"||!Number.isSafeInteger(r)||!Array.isArray(n)||n.length===0||n.length>64)return!1;for(let s=0;s<n.length;s++)if(!t(n[s]))return!1;return!0}function be(e){return e===null||typeof e!="object"?!1:Ee(e.__frame_patch,ge)}function Ae(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function Te(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function Re(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const r=t.theme;return typeof r=="string"&&ce.includes(r)}var S=/^[\w.-]+\.js$/;function Se(e,t,r){return r?"inert":typeof t=="string"&&S.test(t)?e?[t]:"inert":e?"inert":"framed"}var We="frame_ldx_runtime",Ke="script#an-form";function Le(){return{post(e,t){parent.postMessage(e,t)},on(e){const t=r=>{r.source===parent&&e(r.data,r.origin,r.isTrusted)};return addEventListener("message",t),()=>removeEventListener("message",t)}}}function ke(){return{post:()=>{},on:()=>()=>{}}}var I="__frame_scroll",Pe=150,Oe=310,Ce=160,Me=3e4;function je(){let e=0,t=!1,r=!1,n=!1,s=0,o=null;const i=u=>{try{sessionStorage.setItem(I,JSON.stringify({y:u}))}catch{}},c=()=>{if(clearTimeout(e),o===null)return;const u=o;o=null,i(u)},m=()=>{if(t){t=!1;return}r=!0,o=scrollY,clearTimeout(e),e=setTimeout(c,Pe)};try{addEventListener("scroll",m,{passive:!0}),addEventListener("pagehide",c)}catch{}const d=()=>{let u;try{u=sessionStorage.getItem(I)}catch{return null}if(u===null)return null;let a;try{a=JSON.parse(u)}catch{a=null}const f=a?.y;if(!(typeof f=="number"&&Number.isFinite(f)&&f>=0)){try{sessionStorage.removeItem(I)}catch{}return null}return f};let v=!1;const p=u=>{try{const a=scrollY;scrollTo({top:u,left:0,behavior:"instant"}),s=u,n=!0,clearTimeout(e),o=null,i(u);const f=scrollY;f!==a&&(t=!0),f!==u&&!v&&(v=!0,addEventListener("load",()=>{try{if(scrollY===f){const b=d();p(b!==null?b:s)}}catch{}},{once:!0}))}catch{}},y=()=>{try{return!!location.hash}catch{return!0}};let w=!1;const h=()=>{try{if(w||innerWidth>Oe||innerHeight>Ce)return;w=!0;const u=Date.now(),a=()=>{try{removeEventListener("resize",a)}catch{}if(Date.now()-u>Me||r||y())return;const f=d();p(f!==null?f:s)};addEventListener("resize",a)}catch{}};let E=!1,A=!1;return{restore(){if(E||(E=!0,y()))return;const u=d();u!==null&&(p(u),h())},promoted(){if(A||(A=!0,y()))return;const u=d();u!==null?(p(u),h()):n&&p(s)}}}function Ne(e,t,r,n){let s=null;try{s=window.trustedTypes?.createPolicy("frame-runtime",{createScriptURL:m=>m})??null}catch{}const o=window.Worker,i=o?.prototype,c=Object.freeze({Worker:o,workerOn:i?.addEventListener,workerPost:i?.postMessage,workerTerminate:i?.terminate,fetch:window.fetch.bind(window),preventDefault:Event.prototype.preventDefault,policy:s,origins:t});r(e).then(m=>m?.bootTopLevel?m.bootTopLevel(c,n):n.settle()).catch(()=>n.settle())}var $e="modulepreload",qe=function(e){return"/"+e},Xe={},Be=function(t,r,n){let s=Promise.resolve();function o(i){const c=new Event("vite:preloadError",{cancelable:!0});if(c.payload=i,window.dispatchEvent(c),!c.defaultPrevented)throw i}return s.then(i=>{for(const c of i||[])c.status==="rejected"&&o(c.reason);return t().catch(o)})},De=window===top,J=Object.getOwnPropertyDescriptor(window,"claude"),O=Se(De,window.__FRAME_PREAMBLE?.topLevel,J?.writable===!1),U=typeof O=="object"&&O[0],_=U?ke():Le();(function(){const e=Object.defineProperty,t=globalThis,r=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let n=0;for(let s=0;s<r.length;s++){const o=r[s];try{e(t,o,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[o]}catch{}try{e(t,o,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[o]=="function"&&n++}if(n&&O==="framed")try{_.post({__frame_rtc_lockdown_failed:n},"*")}catch{}})();var Ie=1e4,Ue=2e3,Q=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function ee(e){for(const t of Q)if(t.endsWith(":*"))try{const r=new URL(e);if(`${r.protocol}//${r.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var C=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),x=window.__FRAME_PREAMBLE?.transforms,F=window.__FRAME_PREAMBLE?.comments,z=window.__FRAME_PREAMBLE?.translate,H=window.__FRAME_PREAMBLE?.ldx;function L(e){return Be(()=>import("/_runtime/"+e),void 0)}function te(e,t){return{contract:e.contract,changes:new Set(e.changes??[]),flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:new Map,shellOrigin:t,mount:$,hooks:j,pipe:()=>({wrap:(r,n)=>(...s)=>{try{return n(...s)}catch(o){return Promise.reject(o)}}})}}var M=null,T=null;function re(e,t,r){try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var W=!1,j={editBefore:null,edit:null};function xe(e,t,r=!1){const n=[];let s;if(r)try{j.editBefore?.(e)}catch{}for(const o of e.elements){const i=document.querySelector(`[data-id="${o.target}"]`);if(!i){s=o.target;break}if([...Object.keys(o.attrsSet??{}),...o.attrsRemoved??[]].some(c=>!fe(c))){s=o.target;break}if(o.text!==void 0&&(!he(i)||we(i))){s=o.target;break}for(const[c,m]of Object.entries(o.attrsSet??{}))if(!oe(i,c)){try{i.setAttribute(c,m)}catch{}ne(i,c,m)}for(const c of o.attrsRemoved??[])oe(i,c)||(i.removeAttribute(c),ne(i,c,null));typeof o.text=="string"&&ve(i,o.text),n.push(o.target)}if(r)try{j.edit?.(e.seq,n,s)}catch{}if(s!==void 0){_.post({__frame_patch_miss:{seq:e.seq}},t);return}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:e.seq,targets:n}}))}catch{}}function ne(e,t,r){if(!(e instanceof HTMLInputElement))return;const n=t.toLowerCase();n==="checked"?e.checked=r!==null:n==="value"&&e.type!=="file"&&(e.value=r??"")}function oe(e,t){const r=t.toLowerCase(),n=e;return r==="data-id"||(r==="value"||r==="checked")&&(n.__artifactSecret===!0||/^(password|hidden|file)$/.test(n.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${e.getAttribute("autocomplete")??""} ${n.autocomplete??""}`))}function se(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,W=!0):W&&(delete t.dataset.theme,t.style.colorScheme="",W=!1)}var N=new Map;function Fe(){let e;const t={u:new Promise(r=>{e=r}),r:r=>{t.done=!0,e(r)},done:!1,nulled:!1};return t}function K(){for(const e of N.values())e.done||(e.nulled=!0,e.r(null))}var ze=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),$=(e,t)=>{const r=N.get(e);if(!r||r.done){r?.nulled&&T&&_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:e}},T);return}const n=typeof t=="function"?Object.setPrototypeOf(t,ze):Object.assign(Object.create(null),t);typeof n.then=="function"&&delete n.then,r.r(Object.freeze(n))};function ae(){const e=J?.value??{};re(window,"claude",e);for(const t of Object.keys(C)){if(e[t]!==void 0){re(e,t,e[t]);continue}N.set(t,Fe())}if(e.use===void 0){const t=r=>{if(typeof r!="string"||!Object.hasOwn(C,r))return Promise.resolve(null);const n=N.get(r);return n?n.u:Promise.resolve(e[r]??null)};try{Object.defineProperty(e,"use",{value:t,writable:!0,configurable:!0,enumerable:!1})}catch{}}}if(O==="framed"){const e=x&&S.test(x)?L(x).catch(()=>{}):Promise.resolve(void 0),t=a=>{if(a.type==="auxclick"&&a.button!==1)return;const f=a.target,b=f&&f.closest?f.closest("a[href],area[href]"):null;if(!b)return;const P=b.getAttribute("href");if(!P)return;let R;try{R=new URL(P,document.baseURI)}catch{return}if((R.protocol==="http:"||R.protocol==="https:")&&R.origin!==location.origin){a.preventDefault();const k=(b.getAttribute("target")??"").toLowerCase(),g=a.type==="auxclick"||a.metaKey||a.ctrlKey||a.shiftKey||a.altKey||!["","_self","_top","_parent"].includes(k);_.post({__frame_nav:!0,url:R.href,newTab:g},"*")}};addEventListener("click",t,!0),addEventListener("auxclick",t,!0);const r={},n=a=>{a.isTrusted&&(r.pointer=!0)},s=a=>{a.isTrusted&&(r.click=!0)};addEventListener("pointermove",n,{capture:!0,passive:!0}),addEventListener("click",s,{capture:!0,passive:!0}),e.then(a=>{a?.wireNav&&(a.wireNav(),removeEventListener("click",t,!0),removeEventListener("auxclick",t,!0),removeEventListener("pointermove",n,!0),removeEventListener("click",s,!0),a.wireEngagement?.(r))});let o=null;try{o=je()}catch{}ae();let i=null,c=null,m=0;const d=_.on((a,f)=>{ee(f)&&Ae(a)&&(i=a.__frame_init,T=f,d(),clearTimeout(m),c?.())});_.post({__frame_connect:!0},"*");const v=setTimeout,p=clearTimeout;let y=0;const w=()=>{try{_.post({__frame_alive:!0},"*")}catch{}y=v(w,Ue)},h=()=>p(y);w(),addEventListener("load",h,{once:!0});const E=new Promise(a=>{c=a,m=setTimeout(()=>{d(),a()},Ie)}),A=document.readyState==="loading"?new Promise(a=>document.addEventListener("DOMContentLoaded",()=>a(),{once:!0})):Promise.resolve();A.then(()=>{try{o?.restore()}catch{}});const u={cb:null};_.on((a,f)=>{if(ee(f)&&Te(a)){try{o?.promoted()}catch{}u.cb?.()}}),E.then(async()=>{if(!i||!T){K();return}se(i.theme);const a=T;let f=!1,b=!1;_.on((l,X,B)=>{if(X!==a)return;Re(l)&&se(l.__frame_theme.theme),be(l)&&xe(l.__frame_patch,a,B);const Y=l?.__fc_mode;Y&&typeof Y=="object"&&!f&&F&&S.test(F)&&(f=!0,L(F).then(V=>V.install?.(a,Y.on===!0)).catch(()=>{}));const G=l?.__ft_cmd;G&&typeof G=="object"&&!b&&z&&S.test(z)&&(b=!0,L(z).then(V=>V.install?.(a,G)).catch(()=>{}))});const P=Object.keys(i.capabilities??{}).filter(l=>Object.hasOwn(C,l)).map(l=>[l,C[l]]).filter(l=>typeof l[1]=="string"&&S.test(l[1])),R=await Promise.allSettled(P.map(([,l])=>L(l))),k=await e,g=T;if(k?.buildBoot||_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},g),k?.buildBoot)try{M=k.buildBoot(i,k.TRANSFORMS??{},{shellOrigin:g,mount:$,hooks:j},l=>_.post({__frame_cap_telemetry:l},g))}catch{_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},g),M=te(i,g)}else M=te(i,g);const q=l=>_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:l}},g),ie=M;R.forEach((l,X)=>{const B=P[X][0];if(l.status!=="fulfilled"){q(B);return}try{l.value?.install?.(ie)}catch{q(B)}}),K(),await A,h(),_.post({__frame_ready:!0},T),e.then(l=>l?.installSizeReporter?.(g,u)),ie.flags.has("frame_ldx_runtime")&&H&&S.test(H)&&document.querySelector("script#an-form")&&L(H).then(l=>l?.boot?.()).catch(()=>!1).then(l=>{l!==!0&&q("_ldx")})})}else U&&(ae(),Ne(U,Q,L,{settle:K,mount:$}))})();</script><!-- /frame-runtime --><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
 <!doctype html>
 <html lang="es">
 <head>
@@ -63,8 +64,7 @@
   .hint{font-size:12px; color:var(--ink-soft); margin-top:4px; font-weight:400; text-transform:none; letter-spacing:0;}
 
   /* layout */
-  #app{display:none; min-height:100vh;}
-  #app.show{display:flex;}
+  #app{display:flex; min-height:100vh;}
   nav.side{
     width:220px; flex:none; background:var(--surface); border-right:1px solid var(--border);
     display:flex; flex-direction:column; padding:20px 14px; gap:2px; position:sticky; top:0; height:100vh; overflow-y:auto;
@@ -81,8 +81,6 @@
   .navbtn .n{font-family:"IBM Plex Mono",monospace; font-size:11px; background:var(--surface-3); color:var(--ink-soft); border-radius:10px; padding:1px 7px; margin-left:auto;}
   .navbtn.active .n{background:var(--accent); color:var(--accent-ink);}
   .side-foot{margin-top:auto; padding:10px 8px; font-size:11.5px; color:var(--ink-soft); border-top:1px solid var(--border);}
-  .side-foot .who{font-weight:600; color:var(--ink); display:block; margin-bottom:4px; word-break:break-all;}
-  .side-foot button{background:none; border:none; padding:0; color:var(--accent); font-weight:600; font-size:11.5px;}
 
   /* stacked bar chart (pestaña Gráficas): una barra por decisión, segmentada
      por quién autorizó — combina ambas dimensiones en una sola gráfica */
@@ -219,28 +217,6 @@
   .toast{position:fixed; bottom:22px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; box-shadow:var(--shadow); z-index:80; display:none;}
   .toast.show{display:block;}
 
-  /* auth gate */
-  .authgate{position:fixed; inset:0; background:var(--bg); display:flex; align-items:center; justify-content:center; z-index:100; padding:20px;}
-  .authgate.hide{display:none;}
-  .authcard{background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); padding:36px 32px; max-width:380px; width:100%; text-align:center;}
-  .authcard .mark{font-size:24px; font-family:"Oswald",sans-serif; font-weight:700; color:var(--accent); margin-bottom:6px;}
-  .authcard .sub{color:var(--ink-soft); font-size:13px; margin-bottom:22px;}
-  .authcard p{font-size:13.5px; color:var(--ink-soft); margin:0 0 18px;}
-  .gsignin{display:inline-flex; align-items:center; gap:10px; background:#fff; color:#3c4043; border:1px solid #dadce0; border-radius:8px; padding:10px 18px; font-weight:600; font-size:14px;}
-  .gsignin:hover{box-shadow:0 1px 3px rgba(0,0,0,.15);}
-  .gsignin svg{width:18px; height:18px;}
-  .authform{text-align:left;}
-  .authform .field{margin-bottom:12px;}
-  .authform label{font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-bottom:5px;}
-  .authform input{border-radius:7px; border:1px solid var(--border); background:var(--surface); color:var(--ink); padding:9px 11px; font-size:14px; font-family:inherit;}
-  .authform .btn.primary{width:100%; justify-content:center; margin-top:4px;}
-  .authlink{background:none; border:none; color:var(--accent); font-size:12.5px; font-weight:600; padding:0; margin-top:14px; cursor:pointer;}
-  .autherr{color:var(--crit); font-size:12.5px; margin:-6px 0 12px; text-align:left;}
-  .pwmodal{position:fixed; inset:0; background:rgba(20,20,18,.42); display:none; align-items:center; justify-content:center; z-index:110; padding:20px;}
-  .pwmodal.show{display:flex;}
-  .pwmodal .authcard{text-align:center; max-width:340px;}
-  .pwok{color:var(--ok); font-size:12.5px; margin:-6px 0 12px; text-align:left;}
-
   ::-webkit-scrollbar{width:10px; height:10px;}
   ::-webkit-scrollbar-thumb{background:var(--surface-3); border-radius:99px;}
 
@@ -256,43 +232,6 @@
 </style>
 </head>
 <body>
-
-<div class="authgate" id="authGate">
-  <div class="authcard">
-    <div class="mark">Bitácora de Ruta</div>
-    <div class="sub">Incidencias de mercancía en ruta</div>
-    <div id="authGateBody">
-      <p>Verificando acceso…</p>
-    </div>
-  </div>
-</div>
-
-<div class="pwmodal" id="pwModal">
-  <div class="authcard">
-    <div class="mark" style="font-size:18px;">Cambiar contraseña</div>
-    <form class="authform" id="pwForm" novalidate>
-      <div class="autherr" id="pwErr" style="display:none;"></div>
-      <div class="field"><label for="pw_old">Contraseña actual</label><input type="password" id="pw_old" autocomplete="current-password" required></div>
-      <div class="field"><label for="pw_new">Contraseña nueva</label><input type="password" id="pw_new" autocomplete="new-password" required></div>
-      <div class="field"><label for="pw_new2">Confirmar contraseña nueva</label><input type="password" id="pw_new2" autocomplete="new-password" required></div>
-      <button type="submit" class="btn primary">Guardar</button>
-    </form>
-    <button type="button" class="authlink" id="btnPwCancel">Cancelar</button>
-  </div>
-</div>
-
-<div class="pwmodal" id="nameModal">
-  <div class="authcard">
-    <div class="mark" style="font-size:18px;">Editar nombre</div>
-    <form class="authform" id="nameEditForm" novalidate>
-      <div class="autherr" id="nameEditErr" style="display:none;"></div>
-      <div class="field"><label for="ne_name">Tu nombre</label><input type="text" id="ne_name" autocomplete="name" required></div>
-      <button type="submit" class="btn primary">Guardar</button>
-    </form>
-    <button type="button" class="authlink" id="btnNameCancel">Cancelar</button>
-  </div>
-</div>
-
 <div id="app">
 
   <nav class="side">
@@ -305,24 +244,21 @@
     <button class="navbtn" data-tab="nueva">+ Nueva incidencia</button>
     <button class="navbtn" data-tab="lista">Bitácora</button>
     <button class="navbtn" data-tab="catalogo">Catálogo de mercancía</button>
-    <div class="side-foot">
-      <span class="who" id="whoAmI"></span>
-      <button type="button" id="btnEditName" style="margin-right:12px;">Editar nombre</button>
-      <button type="button" id="btnChangePass" style="margin-right:12px;">Cambiar contraseña</button>
-      <button type="button" id="btnSignOut">Cerrar sesión</button>
-    </div>
+    <div class="side-foot">Registro compartido de ruta</div>
   </nav>
 
   <main>
+    <div id="readonlyBanner" class="banner readonly" style="display:none;">
+      <span>🔒</span>
+      <span>Este documento está en modo de solo lectura para ti — los cambios no se pueden guardar desde esta vista.</span>
+    </div>
+
     <!-- RESUMEN -->
     <section class="panel" id="panel-resumen">
       <div class="pagehead">
         <div>
           <h1>Resumen</h1>
           <p>Panorama general de incidencias de mercancía dañada en ruta y su apego a política.</p>
-        </div>
-        <div class="actions">
-          <button class="btn" id="btnExportSummary">Exportar CSV</button>
         </div>
       </div>
       <div class="stats" id="statTiles"></div>
@@ -418,20 +354,20 @@
               <div>Arrastra fotos aquí o</div>
               <button type="button" class="btn sm" id="btnPickPhoto" style="margin-top:8px;">Elegir fotos</button>
               <input type="file" id="photoInput" accept="image/*" multiple style="display:none;">
-              <div class="hint" style="margin-top:8px;">Las imágenes se comprimen automáticamente. Máximo 3 fotos por caso para mantener la bitácora ligera.</div>
+              <div class="hint" style="margin-top:8px;">Las imágenes se comprimen automáticamente para mantener la bitácora ligera.</div>
             </div>
             <div class="thumbs" id="photoThumbs"></div>
           </div>
 
           <div class="formcard full">
             <h3><span class="num">5</span>Registro</h3>
-            <div class="field"><label>Registrado por</label>
-              <div class="hint" id="registradoPorHint" style="margin-top:0;"></div>
+            <div class="field"><label for="f_registrado">Registrado por</label>
+              <select id="f_registrado"><option>Nic</option><option>Citlali</option><option>Nicole</option><option>Cesar</option><option>Ulises</option><option>Yareli</option><option>Carlos</option><option>Julio</option><option>Otro</option></select>
             </div>
           </div>
 
           <div class="full" style="grid-column:1/-1; display:flex; gap:10px; margin-top:6px;">
-            <button type="submit" class="btn primary" id="btnSubmitCase">Guardar incidencia</button>
+            <button type="submit" class="btn primary">Guardar incidencia</button>
             <button type="button" class="btn" id="btnClearForm">Limpiar</button>
           </div>
         </form>
@@ -444,9 +380,6 @@
         <div>
           <h1>Bitácora</h1>
           <p>Todos los casos registrados. Da clic en una fila para ver el detalle y el seguimiento.</p>
-        </div>
-        <div class="actions">
-          <button class="btn" id="btnExportList">Exportar CSV</button>
         </div>
       </div>
       <div class="filters">
@@ -499,34 +432,26 @@
 <div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt=""></div>
 <div class="toast" id="toast"></div>
 
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script id="app-data" type="application/json">{"folioSeq":1,"catalogo":[{"id":"almacen-a","nombre":"Almacén A","permiteCambioFisico":false,"notas":""},{"id":"almacen-k","nombre":"Almacén K","permiteCambioFisico":false,"notas":""},{"id":"almacen-q","nombre":"Almacén Q","permiteCambioFisico":false,"notas":""}],"casos":[{"id":"0gpgc0vhuvq1","folio":"BR-0001","fechaRegistro":"2026-08-31","ruta":"25","operador":"","numeroPedido":"6562","tipoMercanciaId":"almacen-a","tipoMercanciaNombre":"Almacén A","descripcionDano":"cuadro dañado","decision":"Se queda en domicilio sin cambio","autorizadoPor":"Vendedor","autorizadoNombre":"adriana","fueraDePolitica":true,"registradoPor":"Nic","estatus":"Abierto","fotos":[],"seguimientos":[],"creadoEn":"2026-08-31T18:06:16.345Z"}]}</script>
 <script>
 (function(){
   "use strict";
 
-  var firebaseConfig = {
-    apiKey: "AIzaSyCknsKqrrkK0YCSD9ye9a5sQ6ZhCq22M0c",
-    authDomain: "bitacora-incidencias-d2747.firebaseapp.com",
-    projectId: "bitacora-incidencias-d2747",
-    storageBucket: "bitacora-incidencias-d2747.firebasestorage.app",
-    messagingSenderId: "82358841068",
-    appId: "1:82358841068:web:12f291170e67ab2fbc3fc9"
-  };
-  firebase.initializeApp(firebaseConfig);
-  var auth = firebase.auth();
-  var db = firebase.firestore();
+  // Captured synchronously, before any rendering or interaction has touched the
+  // DOM, so this is the page exactly as served — never the live/mutated DOM.
+  // Republishing is: this pristine markup, with just the data script's text swapped.
+  var PRISTINE_DATA_STRING = document.getElementById('app-data').textContent;
+  var PRISTINE_HTML = '<!doctype html>\n' + document.documentElement.outerHTML;
 
-  var OWNER_EMAIL = 'kasselatcom@gmail.com'; // única cuenta que puede eliminar incidencias
-  var STATE = {catalogo:[], casos:[]};
-  var currentUser = null;
-  var currentTab = 'resumen';
-  function isOwner(){ return !!currentUser && (currentUser.email||'').toLowerCase() === OWNER_EMAIL; }
-  var pendingPhotos = []; // {id, dataUrl} for the new-case form, not yet saved
+  var DEFAULT_STATE = {folioSeq:0, catalogo:[], casos:[]};
+  var STATE;
+  try{ STATE = JSON.parse(PRISTINE_DATA_STRING); }
+  catch(e){ STATE = DEFAULT_STATE; }
+
+  var isReadOnly = false;
+  var artifactNs = null;
+  var pendingPhotos = []; // {dataUrl} for the new-case form, not yet saved
   var selectedCasoId = null;
-  var unsubCatalogo = null, unsubCasos = null;
-  var seededCatalogo = false;
 
   // ---------- helpers ----------
   function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4); }
@@ -553,12 +478,11 @@
 
   var DECISIONES = [
     "Regresada a almacén (según política)",
-    "Cambio físico en domicilio",
     "Se queda en domicilio sin cambio",
     "Rechazo total del pedido",
-    "Otro"
+    "Entrega parcial"
   ];
-  var DECISIONES_RIESGO = ["Cambio físico en domicilio", "Se queda en domicilio sin cambio"];
+  var DECISIONES_RIESGO = ["Se queda en domicilio sin cambio", "Entrega parcial"];
 
   function computeFueraDePolitica(tipoId, decision){
     var tipo = catalogoById(tipoId);
@@ -567,263 +491,54 @@
     return DECISIONES_RIESGO.indexOf(decision) !== -1;
   }
 
-  // ---------- auth ----------
-  function showGate(html){
-    document.getElementById('authGateBody').innerHTML = html;
-    document.getElementById('authGate').classList.remove('hide');
-    document.getElementById('app').classList.remove('show');
+  // ---------- persistence ----------
+  function buildDocument(){
+    return PRISTINE_HTML.replace(PRISTINE_DATA_STRING, JSON.stringify(STATE));
   }
 
-  function authErrMsg(err){
-    var code = err && err.code;
-    if(code === 'auth/invalid-email') return 'Ese correo no es válido.';
-    if(code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/wrong-password') return 'Correo o contraseña incorrectos.';
-    if(code === 'auth/too-many-requests') return 'Demasiados intentos. Espera un momento y vuelve a intentar.';
-    if(code === 'auth/missing-password') return 'Escribe tu contraseña.';
-    return 'No se pudo iniciar sesión: ' + (err && (err.message || err.code) || '');
-  }
-
-  function renderSignInForm(){
-    showGate(
-      '<form class="authform" id="signInForm" novalidate>' +
-        '<div class="autherr" id="signInErr" style="display:none;"></div>' +
-        '<div class="field"><label for="si_email">Correo</label><input type="email" id="si_email" autocomplete="username" required></div>' +
-        '<div class="field"><label for="si_pass">Contraseña</label><input type="password" id="si_pass" autocomplete="current-password" required></div>' +
-        '<button type="submit" class="btn primary">Entrar</button>' +
-      '</form>' +
-      '<button type="button" class="authlink" id="btnForgotPass">¿Olvidaste tu contraseña?</button>'
-    );
-    var errBox = document.getElementById('signInErr');
-    document.getElementById('signInForm').addEventListener('submit', function(ev){
-      ev.preventDefault();
-      errBox.style.display = 'none';
-      var email = document.getElementById('si_email').value.trim();
-      var pass = document.getElementById('si_pass').value;
-      auth.signInWithEmailAndPassword(email, pass).catch(function(err){
-        errBox.textContent = authErrMsg(err);
-        errBox.style.display = 'block';
-      });
-    });
-    document.getElementById('btnForgotPass').onclick = function(){
-      renderForgotPassword();
-    };
-  }
-
-  function renderForgotPassword(){
-    showGate(
-      '<p>Escribe tu correo y te mandaremos un enlace para poner una contraseña nueva.</p>' +
-      '<form class="authform" id="forgotForm" novalidate>' +
-        '<div class="autherr" id="forgotErr" style="display:none;"></div>' +
-        '<div class="field"><label for="fp_email">Correo</label><input type="email" id="fp_email" autocomplete="username" required></div>' +
-        '<button type="submit" class="btn primary">Enviar enlace</button>' +
-      '</form>' +
-      '<button type="button" class="authlink" id="btnBackToSignIn">Volver a iniciar sesión</button>'
-    );
-    var errBox = document.getElementById('forgotErr');
-    document.getElementById('forgotForm').addEventListener('submit', function(ev){
-      ev.preventDefault();
-      errBox.style.display = 'none';
-      var email = document.getElementById('fp_email').value.trim();
-      auth.sendPasswordResetEmail(email).then(function(){
-        showGate(
-          '<p>Listo. Si <strong>' + esc(email) + '</strong> tiene una cuenta, le llegará un correo con el enlace para poner su contraseña.</p>' +
-          '<button type="button" class="btn" id="btnBackToSignIn2">Volver a iniciar sesión</button>'
-        );
-        document.getElementById('btnBackToSignIn2').onclick = function(){ renderSignInForm(); };
-      }).catch(function(err){
-        errBox.textContent = authErrMsg(err);
-        errBox.style.display = 'block';
-      });
-    });
-    document.getElementById('btnBackToSignIn').onclick = function(){ renderSignInForm(); };
-  }
-
-  function renderNamePrompt(){
-    showGate(
-      '<p>Antes de entrar, dinos tu nombre — así se van a guardar tus registros en la bitácora.</p>' +
-      '<form class="authform" id="nameForm" novalidate>' +
-        '<div class="autherr" id="nameErr" style="display:none;"></div>' +
-        '<div class="field"><label for="np_name">Tu nombre</label><input type="text" id="np_name" autocomplete="name" required></div>' +
-        '<button type="submit" class="btn primary">Continuar</button>' +
-      '</form>'
-    );
-    var errBox = document.getElementById('nameErr');
-    document.getElementById('nameForm').addEventListener('submit', function(ev){
-      ev.preventDefault();
-      errBox.style.display = 'none';
-      var name = document.getElementById('np_name').value.trim();
-      if(!name){
-        errBox.textContent = 'Escribe tu nombre.';
-        errBox.style.display = 'block';
-        return;
+  function persist(successMsg){
+    if(isReadOnly){ toast('Solo lectura: este cambio no se guardó.'); return Promise.resolve(false); }
+    if(!artifactNs){
+      toast('No se pudo conectar con el guardado. Intenta recargar.');
+      return Promise.resolve(false);
+    }
+    var html = buildDocument();
+    if(html.length > 15 * 1024 * 1024){
+      toast('La bitácora es muy pesada (demasiadas fotos). Elimina fotos antiguas antes de continuar.');
+      return Promise.resolve(false);
+    }
+    return artifactNs.publish(html).then(function(){
+      return true;
+    }).catch(function(err){
+      var code = err && err.code;
+      if(code === 'not_writer' || code === 'not_granted'){
+        isReadOnly = true;
+        showReadOnlyBanner();
+        toast('No tienes permiso de edición en este documento.');
+      } else if(code === 'conflict'){
+        // view is reloading to the winning version; nothing else to do
+      } else if(code === 'too_large'){
+        toast('La bitácora superó el tamaño máximo. Elimina fotos antiguas.');
+      } else {
+        toast('No se pudo guardar. Intenta de nuevo.');
       }
-      auth.currentUser.updateProfile({displayName: name}).then(function(){
-        currentUser = auth.currentUser;
-        enterApp();
-      }).catch(function(err){
-        errBox.textContent = 'No se pudo guardar tu nombre: ' + (err.message || err.code || '');
-        errBox.style.display = 'block';
-      });
+      return false;
     });
   }
 
-  function enterApp(){
-    document.getElementById('authGate').classList.add('hide');
-    document.getElementById('app').classList.add('show');
-    document.getElementById('whoAmI').textContent = currentUser.displayName || currentUser.email;
-    document.getElementById('registradoPorHint').textContent =
-      'Se guardará como: ' + (currentUser.displayName || currentUser.email);
-    startListeners();
-    var startTab = 'resumen';
-    try{ startTab = sessionStorage.getItem('bitacora-tab') || 'resumen'; }catch(e){}
-    setTab(startTab);
-  }
-
-  auth.onAuthStateChanged(function(user){
-    if(unsubCatalogo){ unsubCatalogo(); unsubCatalogo = null; }
-    if(unsubCasos){ unsubCasos(); unsubCasos = null; }
-    if(!user){
-      currentUser = null;
-      renderSignInForm();
-      return;
-    }
-    currentUser = user;
-    if(!user.displayName){
-      renderNamePrompt();
-    } else {
-      enterApp();
-    }
-  });
-
-  document.getElementById('btnSignOut').addEventListener('click', function(){ auth.signOut(); });
-
-  // ---------- change password (in-app, no email link needed) ----------
-  function openPwModal(){
-    document.getElementById('pw_old').value = '';
-    document.getElementById('pw_new').value = '';
-    document.getElementById('pw_new2').value = '';
-    var err = document.getElementById('pwErr');
-    err.style.display = 'none'; err.className = 'autherr'; err.textContent = '';
-    document.getElementById('pwModal').classList.add('show');
-  }
-  function closePwModal(){ document.getElementById('pwModal').classList.remove('show'); }
-
-  document.getElementById('btnChangePass').addEventListener('click', openPwModal);
-  document.getElementById('btnPwCancel').addEventListener('click', closePwModal);
-
-  document.getElementById('pwForm').addEventListener('submit', function(ev){
-    ev.preventDefault();
-    var err = document.getElementById('pwErr');
-    err.style.display = 'none'; err.className = 'autherr'; err.textContent = '';
-    var oldPass = document.getElementById('pw_old').value;
-    var newPass = document.getElementById('pw_new').value;
-    var newPass2 = document.getElementById('pw_new2').value;
-    if(newPass.length < 6){
-      err.textContent = 'La contraseña nueva debe tener al menos 6 caracteres.';
-      err.style.display = 'block';
-      return;
-    }
-    if(newPass !== newPass2){
-      err.textContent = 'Las dos contraseñas nuevas no coinciden.';
-      err.style.display = 'block';
-      return;
-    }
-    var user = auth.currentUser;
-    if(!user){ closePwModal(); return; }
-    var cred = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
-    user.reauthenticateWithCredential(cred).then(function(){
-      return user.updatePassword(newPass);
-    }).then(function(){
-      err.className = 'pwok';
-      err.textContent = 'Listo, tu contraseña se cambió.';
-      err.style.display = 'block';
-      setTimeout(closePwModal, 1400);
-    }).catch(function(e){
-      err.className = 'autherr';
-      err.textContent = authErrMsg(e);
-      err.style.display = 'block';
-    });
-  });
-
-  // ---------- edit name ----------
-  function openNameModal(){
-    document.getElementById('ne_name').value = (currentUser && currentUser.displayName) || '';
-    var err = document.getElementById('nameEditErr');
-    err.style.display = 'none'; err.className = 'autherr'; err.textContent = '';
-    document.getElementById('nameModal').classList.add('show');
-  }
-  function closeNameModal(){ document.getElementById('nameModal').classList.remove('show'); }
-
-  document.getElementById('btnEditName').addEventListener('click', openNameModal);
-  document.getElementById('btnNameCancel').addEventListener('click', closeNameModal);
-
-  document.getElementById('nameEditForm').addEventListener('submit', function(ev){
-    ev.preventDefault();
-    var err = document.getElementById('nameEditErr');
-    err.style.display = 'none'; err.className = 'autherr'; err.textContent = '';
-    var name = document.getElementById('ne_name').value.trim();
-    if(!name){
-      err.textContent = 'Escribe tu nombre.';
-      err.style.display = 'block';
-      return;
-    }
-    auth.currentUser.updateProfile({displayName: name}).then(function(){
-      currentUser = auth.currentUser;
-      document.getElementById('whoAmI').textContent = currentUser.displayName || currentUser.email;
-      document.getElementById('registradoPorHint').textContent =
-        'Se guardará como: ' + (currentUser.displayName || currentUser.email);
-      err.className = 'pwok';
-      err.textContent = 'Listo, tu nombre se actualizó.';
-      err.style.display = 'block';
-      setTimeout(closeNameModal, 1200);
-    }).catch(function(e){
-      err.className = 'autherr';
-      err.textContent = 'No se pudo guardar: ' + (e.message || e.code || '');
-      err.style.display = 'block';
-    });
-  });
-
-  // ---------- realtime data ----------
-  function startListeners(){
-    unsubCatalogo = db.collection('catalogo').onSnapshot(function(snap){
-      STATE.catalogo = snap.docs.map(function(d){ var data = d.data(); data.id = d.id; return data; });
-      if(!seededCatalogo && snap.empty){
-        seededCatalogo = true;
-        seedDefaultCatalogo();
-      }
-      renderTipoOptions();
-      updateFiltroTipoOptions();
-      if(currentTab==='catalogo') renderCatalogo();
-      if(currentTab==='resumen') renderResumen();
-    }, function(err){ toast('No se pudo sincronizar el catálogo.'); console.error(err); });
-
-    unsubCasos = db.collection('casos').orderBy('creadoEn','desc').onSnapshot(function(snap){
-      STATE.casos = snap.docs.map(function(d){ var data = d.data(); data.id = d.id; return data; });
-      if(currentTab==='resumen') renderResumen();
-      if(currentTab==='graficas') renderGraficas();
-      if(currentTab==='lista') renderLista();
-      if(selectedCasoId && casoById(selectedCasoId)) renderDrawer();
-    }, function(err){ toast('No se pudo sincronizar la bitácora.'); console.error(err); });
-  }
-
-  function seedDefaultCatalogo(){
-    var defaults = [
-      {nombre:'Almacén A', permiteCambioFisico:false, notas:''},
-      {nombre:'Almacén K', permiteCambioFisico:false, notas:''},
-      {nombre:'Almacén Q', permiteCambioFisico:false, notas:''}
-    ];
-    defaults.forEach(function(d){ db.collection('catalogo').doc().set(d).catch(function(){}); });
+  function showReadOnlyBanner(){
+    document.getElementById('readonlyBanner').style.display = 'flex';
+    document.querySelectorAll('button.primary, #caseForm button[type=submit], #btnAddCat').forEach(function(b){ b.disabled = true; });
   }
 
   // ---------- image compression ----------
-  var MAX_PHOTOS = 3;
   function compressImage(file){
     return new Promise(function(resolve, reject){
       var reader = new FileReader();
       reader.onload = function(e){
         var img = new Image();
         img.onload = function(){
-          var maxDim = 700;
+          var maxDim = 900;
           var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
           var w = Math.max(1, Math.round(img.width * scale));
           var h = Math.max(1, Math.round(img.height * scale));
@@ -831,7 +546,7 @@
           canvas.width = w; canvas.height = h;
           var ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, w, h);
-          resolve(canvas.toDataURL('image/jpeg', 0.55));
+          resolve(canvas.toDataURL('image/jpeg', 0.62));
         };
         img.onerror = reject;
         img.src = e.target.result;
@@ -844,11 +559,6 @@
   function handleFiles(fileList){
     var files = Array.prototype.slice.call(fileList).filter(function(f){ return /^image\//.test(f.type); });
     if(!files.length) return;
-    if(pendingPhotos.length + files.length > MAX_PHOTOS){
-      toast('Máximo ' + MAX_PHOTOS + ' fotos por caso.');
-      files = files.slice(0, MAX_PHOTOS - pendingPhotos.length);
-      if(!files.length) return;
-    }
     Promise.all(files.map(compressImage)).then(function(dataUrls){
       dataUrls.forEach(function(d){ pendingPhotos.push({id: uid(), dataUrl: d}); });
       renderPendingThumbs();
@@ -864,7 +574,6 @@
 
   // ---------- tabs ----------
   function setTab(tab){
-    currentTab = tab;
     document.querySelectorAll('.navbtn').forEach(function(b){ b.classList.toggle('active', b.dataset.tab===tab); });
     document.querySelectorAll('.panel').forEach(function(p){ p.classList.toggle('active', p.id==='panel-'+tab); });
     try{ sessionStorage.setItem('bitacora-tab', tab); }catch(e){}
@@ -884,6 +593,7 @@
     }).join('');
     if(current) sel.value = current;
     updatePolicyHint();
+    updateFiltroTipoOptions();
   }
 
   function renderDecisionGrid(){
@@ -924,10 +634,15 @@
 
   function submitCaseForm(ev){
     ev.preventDefault();
+    if(isReadOnly){ toast('Solo lectura: no puedes guardar desde aquí.'); return; }
     var tipoId = document.getElementById('f_tipo').value;
     var decision = getSelectedDecision();
     var fuera = computeFueraDePolitica(tipoId, decision);
+    STATE.folioSeq = (STATE.folioSeq||0) + 1;
+    var folio = 'BR-' + String(STATE.folioSeq).padStart(4,'0');
     var caso = {
+      id: uid(),
+      folio: folio,
       fechaRegistro: document.getElementById('f_fecha').value || new Date().toISOString().slice(0,10),
       ruta: document.getElementById('f_ruta').value.trim(),
       operador: document.getElementById('f_operador').value.trim(),
@@ -939,39 +654,22 @@
       autorizadoPor: document.getElementById('f_autPor').value,
       autorizadoNombre: document.getElementById('f_autNombre').value.trim(),
       fueraDePolitica: fuera,
-      registradoPor: currentUser.displayName || currentUser.email,
-      registradoPorEmail: currentUser.email,
+      registradoPor: document.getElementById('f_registrado').value,
       estatus: 'Abierto',
       fotos: pendingPhotos.slice(),
       seguimientos: [],
-      creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+      creadoEn: new Date().toISOString()
     };
-    var approxSize = JSON.stringify(caso).length;
-    if(approxSize > 230000){
-      toast('El caso es muy pesado (demasiadas fotos). Quita alguna foto e intenta de nuevo.');
-      return;
-    }
-    var btn = document.getElementById('btnSubmitCase');
-    btn.disabled = true;
-    var casoRef = db.collection('casos').doc();
-    var counterRef = db.doc('meta/counters');
-    db.runTransaction(function(tx){
-      return tx.get(counterRef).then(function(snap){
-        var next = (snap.exists && snap.data().folioSeq ? snap.data().folioSeq : 0) + 1;
-        tx.set(counterRef, {folioSeq: next}, {merge:true});
-        caso.folio = 'BR-' + String(next).padStart(4,'0');
-        tx.set(casoRef, caso);
-        return caso.folio;
-      });
-    }).then(function(folio){
-      toast('Incidencia ' + folio + ' guardada.');
-      resetForm();
-      setTab('lista');
-    }).catch(function(err){
-      console.error(err);
-      toast('No se pudo guardar. Intenta de nuevo.');
-    }).finally(function(){
-      btn.disabled = false;
+    STATE.casos.unshift(caso);
+    persist().then(function(ok){
+      if(ok){
+        toast('Incidencia '+folio+' guardada.');
+        resetForm();
+        setTab('lista');
+      } else {
+        STATE.casos.shift();
+        STATE.folioSeq -= 1;
+      }
     });
   }
 
@@ -993,6 +691,7 @@
       tile(cerrados, 'Cerrados', 'ok')
     ].join('');
 
+    // breakdown: autoriza (solo fuera de politica)
     var autMap = {};
     casos.filter(function(c){return c.fueraDePolitica;}).forEach(function(c){
       var k = c.autorizadoPor || 'Sin especificar';
@@ -1000,6 +699,7 @@
     });
     document.getElementById('breakdownAutoriza').innerHTML = renderBars(autMap, fuera, true);
 
+    // breakdown: tipo mercancia
     var tipoMap = {};
     casos.forEach(function(c){
       var k = c.tipoMercanciaNombre || '—';
@@ -1007,6 +707,7 @@
     });
     document.getElementById('breakdownTipo').innerHTML = renderBars(tipoMap, total, false);
 
+    // breakdown: last 6 months
     var now = new Date();
     var months = [];
     for(var i=5;i>=0;i--){
@@ -1028,6 +729,9 @@
   }
 
   // ---------- gráficas (pestaña dedicada) ----------
+  // Una sola barra por decisión, segmentada por quién autorizó — combina
+  // ambas dimensiones que se pidieron ("las decisiones y por quién se
+  // autorizan") en una única gráfica de barras en vez de dos separadas.
   function renderGraficas(){
     document.getElementById('stackChart').innerHTML = buildStackedBar(STATE.casos);
   }
@@ -1045,6 +749,8 @@
       autTotals[a] = (autTotals[a]||0) + 1;
     });
 
+    // Color slot per autorizador is assigned once, by overall rank, so the
+    // same person/área keeps the same color across every row of the chart.
     var autorizadores = Object.keys(autTotals).sort(function(a,b){ return autTotals[b]-autTotals[a]; }).slice(0,6);
     var colorOf = {};
     autorizadores.forEach(function(a,i){ colorOf[a] = 'var(--cat-'+(i+1)+')'; });
@@ -1105,7 +811,7 @@
     var politica = document.getElementById('filtroPolitica').value;
     return STATE.casos.filter(function(c){
       if(texto){
-        var hay = ((c.numeroPedido||'')+' '+(c.ruta||'')+' '+(c.operador||'')+' '+(c.folio||'')).toLowerCase();
+        var hay = (c.numeroPedido+' '+c.ruta+' '+c.operador+' '+c.folio).toLowerCase();
         if(hay.indexOf(texto)===-1) return false;
       }
       if(tipo && c.tipoMercanciaNombre !== tipo) return false;
@@ -1143,31 +849,6 @@
     }).join('');
   }
 
-  function csvEscape(v){
-    v = (v==null?'':String(v));
-    if(/[",\n]/.test(v)) return '"'+v.replace(/"/g,'""')+'"';
-    return v;
-  }
-
-  function exportCsv(list, filename){
-    var cols = ['folio','fechaRegistro','ruta','operador','numeroPedido','tipoMercanciaNombre','descripcionDano','decision','autorizadoPor','autorizadoNombre','fueraDePolitica','estatus','registradoPor'];
-    var headers = ['Folio','Fecha','Ruta/Unidad','Operador','Número de pedido','Tipo de mercancía','Descripción del daño','Decisión','Autorizó','Nombre','Fuera de política','Estatus','Registrado por'];
-    var rows = [headers.join(',')].concat(list.map(function(c){
-      return cols.map(function(k){
-        var v = c[k];
-        if(k==='fueraDePolitica') v = v ? 'Sí' : 'No';
-        return csvEscape(v);
-      }).join(',');
-    }));
-    var csv = '﻿' + rows.join('\r\n');
-    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
-  }
-
   // ---------- drawer / detalle ----------
   function openCaso(id){
     selectedCasoId = id;
@@ -1190,7 +871,7 @@
       + '<div class="pill '+(c.fueraDePolitica?'crit':'ok')+'" style="margin-bottom:8px;">'+(c.fueraDePolitica?'Fuera de política':'En regla')+'</div>'
       + '<h2 class="folio">'+esc(c.folio)+'</h2>'
       + '<div class="muted mono">'+fmtDate(c.fechaRegistro)+'</div>'
-      + '</div><div style="display:flex; align-items:center; gap:10px;">' + (isOwner() ? '<button class="btn danger sm" id="btnDeleteCaso">Eliminar</button>' : '') + '<button class="closebtn" id="btnCloseDrawer">×</button></div></div>'
+      + '</div><button class="closebtn" id="btnCloseDrawer">×</button></div>'
       + '<dl class="kv">'
       + '<dt>Ruta / Unidad</dt><dd>'+esc(c.ruta)+'</dd>'
       + '<dt>Operador</dt><dd>'+esc(c.operador||'—')+'</dd>'
@@ -1204,48 +885,27 @@
       + '<div class="field" style="max-width:220px;"><label>Estatus</label><select id="drawerEstatus">'+estatusOptions+'</select></div>'
       + (c.fotos && c.fotos.length ? '<div class="seg"><h3>Evidencia fotográfica</h3><div class="drawerphotos">'+c.fotos.map(function(f){return '<img src="'+f.dataUrl+'" data-zoom="'+f.dataUrl+'" alt="evidencia">';}).join('')+'</div></div>' : '')
       + '<div class="seg"><h3>Seguimiento</h3>'
-      + (c.seguimientos && c.seguimientos.length ? c.seguimientos.map(function(s){
+      + (c.seguimientos.length ? c.seguimientos.map(function(s){
           return '<div class="segitem"><div class="meta"><span>'+esc(s.autor||'—')+'</span><span>'+fmtDate(s.fecha)+'</span></div>'+esc(s.nota)+'</div>';
         }).join('') : '<p class="hint">Sin notas de seguimiento todavía.</p>')
       + '<div class="segform"><textarea id="segNota" placeholder="Agregar nota de seguimiento (ATC, vendedor, Comercial Q...)" rows="2"></textarea></div>'
-      + '<div style="display:flex; gap:8px; margin-top:8px;"><button class="btn primary sm" id="btnAddSeg">Agregar nota (como '+esc(currentUser.displayName || currentUser.email)+')</button></div>'
+      + '<div style="display:flex; gap:8px; margin-top:8px;"><input type="text" id="segAutor" placeholder="Tu nombre" style="max-width:160px;"><button class="btn primary sm" id="btnAddSeg">Agregar nota</button></div>'
       + '</div>';
     document.getElementById('drawerContent').innerHTML = html;
     document.getElementById('btnCloseDrawer').onclick = closeDrawer;
-    var btnDeleteCaso = document.getElementById('btnDeleteCaso');
-    if(btnDeleteCaso) btnDeleteCaso.onclick = function(){
-      var btn = document.getElementById('btnDeleteCaso');
-      if(!btn.dataset.confirm){
-        btn.dataset.confirm = '1';
-        btn.textContent = '¿Seguro? Confirmar';
-        setTimeout(function(){
-          if(btn && btn.dataset) { btn.dataset.confirm = ''; btn.textContent = 'Eliminar'; }
-        }, 4000);
-        return;
-      }
-      btn.disabled = true;
-      db.collection('casos').doc(c.id).delete().then(function(){
-        toast('Incidencia eliminada.');
-        closeDrawer();
-      }).catch(function(){
-        toast('No se pudo eliminar.');
-        btn.disabled = false;
-      });
-    };
     document.getElementById('drawerEstatus').onchange = function(){
-      db.collection('casos').doc(c.id).update({estatus: this.value}).then(function(){
-        toast('Estatus actualizado.');
-      }).catch(function(){ toast('No se pudo actualizar.'); });
+      c.estatus = this.value;
+      persist().then(function(ok){ if(ok){ toast('Estatus actualizado.'); renderLista(); renderResumen(); } });
     };
     document.getElementById('btnAddSeg').onclick = function(){
       var nota = document.getElementById('segNota').value.trim();
       if(!nota) return;
-      var entry = {id: uid(), fecha: new Date().toISOString().slice(0,10), autor: currentUser.displayName || currentUser.email, nota: nota};
-      db.collection('casos').doc(c.id).update({
-        seguimientos: firebase.firestore.FieldValue.arrayUnion(entry)
-      }).then(function(){
-        toast('Nota agregada.');
-      }).catch(function(){ toast('No se pudo guardar la nota.'); });
+      var autor = document.getElementById('segAutor').value.trim() || 'Sin nombre';
+      c.seguimientos.push({id: uid(), fecha: new Date().toISOString().slice(0,10), autor: autor, nota: nota});
+      persist().then(function(ok){
+        if(ok){ toast('Nota agregada.'); renderDrawer(); }
+        else { c.seguimientos.pop(); }
+      });
     };
     document.querySelectorAll('[data-zoom]').forEach(function(img){
       img.onclick = function(){
@@ -1253,6 +913,10 @@
         document.getElementById('lightbox').classList.add('show');
       };
     });
+    if(isReadOnly){
+      document.getElementById('drawerEstatus').disabled = true;
+      document.getElementById('btnAddSeg').disabled = true;
+    }
   }
 
   // ---------- catalogo ----------
@@ -1290,13 +954,6 @@
       if(id){ pendingPhotos = pendingPhotos.filter(function(p){return p.id!==id;}); renderPendingThumbs(); }
     });
 
-    document.getElementById('btnExportSummary').addEventListener('click', function(){
-      exportCsv(STATE.casos, 'bitacora-ruta-completa-'+new Date().toISOString().slice(0,10)+'.csv');
-    });
-    document.getElementById('btnExportList').addEventListener('click', function(){
-      exportCsv(filteredCasos(), 'bitacora-ruta-'+new Date().toISOString().slice(0,10)+'.csv');
-    });
-
     ['filtroTexto','filtroTipo','filtroEstatus','filtroPolitica'].forEach(function(id){
       document.getElementById(id).addEventListener('input', renderLista);
       document.getElementById(id).addEventListener('change', renderLista);
@@ -1319,12 +976,16 @@
     document.getElementById('btnAddCat').addEventListener('click', function(){
       var nombre = document.getElementById('cat_nombre').value.trim();
       if(!nombre){ toast('Escribe un nombre de mercancía.'); return; }
-      var item = {nombre: nombre, permiteCambioFisico: newToggleOn, notas: document.getElementById('cat_notas').value.trim()};
-      db.collection('catalogo').doc().set(item).then(function(){
-        toast('Categoría agregada.');
-        document.getElementById('cat_nombre').value=''; document.getElementById('cat_notas').value='';
-        newToggleOn=false; document.getElementById('cat_toggle_new').classList.remove('on');
-      }).catch(function(){ toast('No se pudo agregar.'); });
+      var item = {id: uid(), nombre: nombre, permiteCambioFisico: newToggleOn, notas: document.getElementById('cat_notas').value.trim()};
+      STATE.catalogo.push(item);
+      persist().then(function(ok){
+        if(ok){
+          toast('Categoría agregada.');
+          document.getElementById('cat_nombre').value=''; document.getElementById('cat_notas').value='';
+          newToggleOn=false; document.getElementById('cat_toggle_new').classList.remove('on');
+          renderCatalogo(); renderTipoOptions();
+        } else { STATE.catalogo.pop(); }
+      });
     });
     document.getElementById('catList').addEventListener('click', function(e){
       var toggleId = e.target.closest('[data-toggle-cat]');
@@ -1332,21 +993,42 @@
       if(toggleId){
         var id = toggleId.getAttribute('data-toggle-cat');
         var item = catalogoById(id);
-        db.collection('catalogo').doc(id).update({permiteCambioFisico: !item.permiteCambioFisico}).catch(function(){ toast('No se pudo actualizar.'); });
+        var prev = item.permiteCambioFisico;
+        item.permiteCambioFisico = !item.permiteCambioFisico;
+        persist().then(function(ok){
+          if(ok){ renderCatalogo(); renderTipoOptions(); }
+          else { item.permiteCambioFisico = prev; renderCatalogo(); }
+        });
       }
       if(delId){
         var did = delId.getAttribute('data-del-cat');
-        db.collection('catalogo').doc(did).delete().then(function(){
-          toast('Categoría eliminada.');
-        }).catch(function(){ toast('No se pudo eliminar.'); });
+        var idx = STATE.catalogo.findIndex(function(c){return c.id===did;});
+        var removed = STATE.catalogo.splice(idx,1)[0];
+        persist().then(function(ok){
+          if(ok){ toast('Categoría eliminada.'); renderCatalogo(); renderTipoOptions(); }
+          else { STATE.catalogo.splice(idx,0,removed); renderCatalogo(); }
+        });
       }
     });
 
     // init
     renderDecisionGrid();
     document.getElementById('f_fecha').value = new Date().toISOString().slice(0,10);
+    renderTipoOptions();
+    updateFiltroTipoOptions();
+    var startTab = 'resumen';
+    try{ startTab = sessionStorage.getItem('bitacora-tab') || 'resumen'; }catch(e){}
+    setTab(startTab);
+
+    if(window.claude && window.claude.use){
+      claude.use('artifact').then(function(ns){ artifactNs = ns; if(!ns){ isReadOnly = true; showReadOnlyBanner(); } });
+    } else {
+      isReadOnly = true;
+    }
   });
 })();
 </script>
 </body>
 </html>
+
+</body></html>
